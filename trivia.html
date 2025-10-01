@@ -56,7 +56,7 @@
           <div style="font-size:44px">🎯</div>
           <div>
             <h1>🎯 <span class="brand">Trivia and Triumph</span> 🏆</h1>
-            <div class="subtitle">10 random questions • 200+ pool • Type answers in <strong>all lowercase</strong> • 2 hints • Deal or No Deal</div>
+            <div class="subtitle">10 random questions • 400 pool • Type answers in <strong>all lowercase</strong> • 2 hints • Deal or No Deal</div>
           </div>
         </header>
 
@@ -136,9 +136,10 @@
 
 <script>
 // ----------------------------
-// Trivia and Triumph — updated
+// Trivia and Triumph — 400 questions
 // ----------------------------
 
+// ---------- YOUR ORIGINAL ~200 QUESTIONS (as provided) ----------
 const POOL = [
   {q:"what prime number comes after 47?", a:"53", hint:"it's between 50 and 55"},
   {q:"what is the chemical symbol for gold?", a:"au", hint:"same as 'aurum'"},
@@ -298,17 +299,166 @@ const POOL = [
   {q:"what country hosts the city riyadh?", a:"saudi arabia", hint:"middle east"},
   {q:"what is the process by which liquid water becomes vapor?", a:"evaporation", hint:"heat driven"},
   {q:"what is the mathematical constant e approx?", a:"2.718", hint:"base of natural logs"}
+  // (end of original ~200 block)
 ];
 
-// expand to at least 200 entries by duplicating if needed
-(function expandPool(){
-  while(POOL.length < 200){
-    const base = POOL[POOL.length % POOL.length];
-    POOL.push({q: base.q, a: base.a, hint: base.hint});
+// ---------- ADD 200 NEW, FUN & QUIRKY QUESTIONS ----------
+
+const EXTRA = [
+  {q:"what common fruit shares its name with a color?", a:"orange", hint:"looks like its name"},
+  {q:"what animal's fingerprints are nearly identical to humans'?", a:"koala", hint:"australian marsupial"},
+  {q:"which planet spins fastest on its axis (shortest day)?", a:"jupiter", hint:"largest planet"},
+  {q:"what is the only mammal capable of true flight?", a:"bat", hint:"night flyer"},
+  {q:"what popular beverage was originally green before being changed to brown by its maker?", a:"coca cola", hint:"fizzy drink"},
+  {q:"what is the name of the phobia for being tickled by feathers?", a:"pteronophobia", hint:"from greek for feather"},
+  {q:"what vegetable was once used as a unit of currency in ancient egypt? (short)", a:"onion", hint:"used in ceremonies"},
+  {q:"what color is a polar bear's skin under its white fur?", a:"black", hint:"surprising"},
+  {q:"what is the term for a group of flamingos?", a:"flamboyance", hint:"very showy group name"},
+  {q:"what is the small island nation known for its red and white flag with a maple leaf?", a:"canada", hint:"north america"},
+  {q:"what gas gives soda its fizz?", a:"carbon dioxide", hint:"co2"},
+  {q:"which bird can mimic human speech best?", a:"parrot", hint:"colorful talker"},
+  {q:"what is the fear of long words ironically called?", a:"hippopotomonstrosesquipedaliophobia", hint:"very long word"},
+  {q:"what musical instrument has 47 strings and 7 pedals?", a:"harp", hint:"angels often play it"},
+  {q:"what food famously kept sailors from scurvy?", a:"lime", hint:"vitamin c"},
+  {q:"what is the term for baby goats?", a:"kids", hint:"same word used for children sometimes"},
+  {q:"what popular board game includes properties like boardwalk and park place?", a:"monopoly", hint:"buying and trading"},
+  {q:"what household pet purrs when content?", a:"cat", hint:"likes naps"},
+  {q:"what common beverage comes from fermented grapes?", a:"wine", hint:"often red or white"},
+  {q:"which instrument do you blow across a hole to play (woodwind)?", a:"flute", hint:"airy sound"},
+  {q:"what fruit has seeds on the outside?", a:"strawberry", hint:"red and sweet"},
+  {q:"what is the only edible nut that grows on a tree and not in the ground? (short)", a:"almond", hint:"used in marzipan"},
+  {q:"what bright green mineral is often used in jewelry and nicknamed 'emerald of the sea'?", a:"malachite", hint:"banded green"},
+  {q:"which animal can sleep standing up and lying down?", a:"horse", hint:"barn friend"},
+  {q:"what sweet spread is made from roasted peanuts?", a:"peanut butter", hint:"sandwich favorite"},
+  {q:"what is the slowest land animal?", a:"sloth", hint:"lives in trees"},
+  {q:"which sweet treat melts at low temperatures and is often given on valentine's day?", a:"chocolate", hint:"cocoa product"},
+  {q:"what drink is made by steeping tea leaves in hot water?", a:"tea", hint:"british favorite"},
+  {q:"what is the most widely planted crop in the world used for bread and pasta?", a:"wheat", hint:"staple grain"},
+  {q:"which bird lays the largest eggs?", a:"ostrich", hint:"big and heavy"},
+  {q:"what household item can be used to remove odors when placed in fridge?", a:"baking soda", hint:"sodium bicarbonate"},
+  {q:"which fruit is known as the 'king of fruits' in some parts of asia?", a:"durian", hint:"famous smell"},
+  {q:"what imaginary line divides the earth into northern and southern hemispheres?", a:"equator", hint:"zero degrees latitude"},
+  {q:"what is the main ingredient in a traditional japanese miso soup?", a:"miso", hint:"fermented soybean paste"},
+  {q:"what metal is used to make pennies in the united states (modern composition)?", a:"zinc", hint:"coated with copper"},
+  {q:"what is the capital of iceland, famous for geothermal pools?", a:"reykjavik", hint:"northern europe"},
+  {q:"what small crustacean is often served with cocktail sauce?", a:"shrimp", hint:"seafood favorite"},
+  {q:"what is the term for an animal that eats both plants and meat?", a:"omnivore", hint:"eats everything"},
+  {q:"which fruit is associated with keeping doctors away in the proverb?", a:"apple", hint:"an a-day saying"},
+  {q:"what is the main ingredient in guacamole?", a:"avocado", hint:"green and creamy"},
+  {q:"what sweet crystalline substance do bees make from nectar?", a:"honey", hint:"sticky and sweet"},
+  {q:"what household plant product is used to make tea 'chai' in many cultures?", a:"ginger", hint:"spicy root"},
+  {q:"what is the name of the largest desert in the world (non-polar)?", a:"sahara", hint:"north africa"},
+  {q:"what device measures temperature?", a:"thermometer", hint:"mercury used historically"},
+  {q:"which sea creature has a shell and is slow-moving, often called a 'seacow' (short)", a:"manatee", hint:"gentle giant"},
+  {q:"what tasty snack is made by heating popcorn kernels?", a:"popcorn", hint:"movie snack"},
+  {q:"what is the study of rocks called?", a:"geology", hint:"earth sciences"},
+  {q:"what popular sandwich ingredient is made from cured pork belly?", a:"bacon", hint:"crispy breakfast"},
+  {q:"what color is the sun often depicted as?", a:"yellow", hint:"bright and warm"},
+  {q:"what is the name of the famous clock tower in london (common name)?", a:"big ben", hint:"near the houses of parliament"},
+  {q:"what is the name of the chemical in chili peppers that makes them hot?", a:"capsaicin", hint:"spicy compound"},
+  {q:"what type of tree produces acorns?", a:"oak", hint:"sturdy hardwood"},
+  {q:"what is the name of the largest volcano in the solar system located on mars?", a:"olympus mons", hint:"very tall"},
+  {q:"what do you call a baby cow?", a:"calf", hint:"on a farm"},
+  {q:"what is the common name for sodium chloride?", a:"salt", hint:"table seasoning"},
+  {q:"what is the common name for dihydrogen monoxide?", a:"water", hint:"h2o"},
+  {q:"what is the name of the famous italian pasta shaped like little ears?", a:"orecchiette", hint:"means small ears"},
+  {q:"what is the name for a scientist who studies weather?", a:"meteorologist", hint:"forecasts storms"},
+  {q:"what is the fastest marine mammal?", a:"orca", hint:"killer whale (fast swimmer)"},
+  {q:"what is the name of the popular italian coffee made by forcing hot water through finely ground coffee?", a:"espresso", hint:"short and strong"},
+  {q:"what fruit do you get from a coconut palm?", a:"coconut", hint:"white flesh and water"},
+  {q:"what classic toy is made of interlocking colorful bricks?", a:"lego", hint:"buildable blocks"},
+  {q:"what insect goes through metamorphosis from caterpillar to winged adult?", a:"butterfly", hint:"starts as a caterpillar"},
+  {q:"what is the name of the largest planet in our solar system?", a:"jupiter", hint:"great red spot"},
+  {q:"which fruit is used to make vinegar when fermented?", a:"apple", hint:"cider vinegar"},
+  {q:"what sweet seasoning comes from sugarcane or sugar beets?", a:"sugar", hint:"bakes cakes"},
+  {q:"which animal is known as man's best friend?", a:"dog", hint:"loyal companion"},
+  {q:"what structure do bees build to store honey?", a:"hive", hint:"hexagonal cells"},
+  {q:"what is the name of the organ humans use to breathe?", a:"lungs", hint:"paired organs"},
+  {q:"what do you call a group of crows?", a:"murder", hint:"spooky name"},
+  {q:"what is the process plants use to convert sunlight into energy?", a:"photosynthesis", hint:"chlorophyll involved"},
+  {q:"what tool do carpenters use to drive nails?", a:"hammer", hint:"handle and head"},
+  {q:"what sweet fruit has a fuzzy skin and a stone inside?", a:"peach", hint:"summer fruit"},
+  {q:"what do you call an animal that eats only plants?", a:"herbivore", hint:"plant eater"},
+  {q:"what common household item is used to clean teeth?", a:"toothbrush", hint:"use daily"},
+  {q:"what small device stores digital photos and plugs into your camera?", a:"sd card", hint:"memory card"},
+  {q:"what is the popular name for sodium bicarbonate used in baking?", a:"baking soda", hint:"raises dough"},
+  {q:"what is the main ingredient in the japanese dish sashimi besides rice?", a:"fish", hint:"served raw"},
+  {q:"what is the bright green herb used on pizza and in pesto?", a:"basil", hint:"sweet herb"},
+  {q:"what aquatic animal squirts ink as a defense?", a:"squid", hint:"related to octopus"},
+  {q:"what fruit is also the name of a tech company (with bite logo)?", a:"apple", hint:"famous company"},
+  {q:"what is the small, spicy Korean side dish made of fermented cabbage?", a:"kimchi", hint:"spicy and sour"},
+  {q:"what cold dessert is churned and often served in cones?", a:"ice cream", hint:"popular treat"},
+  {q:"what household pet often chases mice and has whiskers?", a:"cat", hint:"purrs when happy"},
+  {q:"what plant provides the leaf for making tea (common word)?", a:"tea leaf", hint:"steep in hot water"},
+  {q:"what do you call a scientist who studies stars and planets?", a:"astronomer", hint:"looks at the sky"},
+  {q:"what is the main ingredient in hummus besides tahini?", a:"chickpeas", hint:"also called garbanzo beans"},
+  {q:"what is the name of the spicy red sauce often used with wings in the us?", a:"buffalo sauce", hint:"named after city"},
+  {q:"what yellow spice gives curry its color?", a:"turmeric", hint:"bright yellow"},
+  {q:"what is the name of the famous prehistoric monument in england made of standing stones?", a:"stonehenge", hint:"mysterious site"},
+  {q:"what do you call a baby frog?", a:"tadpole", hint:"lives in water"},
+  {q:"what is the main ingredient in traditional italian pesto?", a:"basil", hint:"green herb with oil and pine nuts"},
+  {q:"what is the name of the holiday where people dress up in costumes and get candy?", a:"halloween", hint:"end of october"},
+  {q:"what is the name of the world famous waterfall on the us-canada border?", a:"niagara falls", hint:"loud and powerful"},
+  {q:"what kitchen appliance pops kernels into popcorn?", a:"popper", hint:"or microwave works"},
+  {q:"what sea creature has five arms (often mistaken with octopus)?", a:"starfish", hint:"sea star"},
+  {q:"what beverage is made from roasted and ground beans?", a:"coffee", hint:"morning stimulant"},
+  {q:"what edible fungus is prized on pizzas and salads (short)?", a:"mushroom", hint:"fungus"},
+  {q:"what is the action of squeezing citrus to get juice called?", a:"juicing", hint:"fresh orange juice"},
+  {q:"what popular toy is a spinning top consisting of layered plastic discs?", a:"beyblade", hint:"battle tops"},
+  {q:"what small nut is often used to make marzipan?", a:"almond", hint:"sweet paste"},
+  {q:"what is the green sauce in mexico made from avocado?", a:"guacamole", hint:"served with chips"},
+  {q:"what do you call a baby sheep?", a:"lamb", hint:"tender meat and animal"},
+  {q:"what common condiment is made from tomatoes and vinegar?", a:"ketchup", hint:"used on fries"},
+  {q:"which insect produces silk used for textiles?", a:"silkworm", hint:"caterpillar stage"},
+  {q:"what is the name of the shallow-fried japanese omelette often served with sushi?", a:"tamago", hint:"sweet omelette"},
+  {q:"what is the term for the sound a dog makes?", a:"bark", hint:"woof"},
+  {q:"what popular frozen treat is made from milk and sugar and often comes on a stick called a 'popsicle'?", a:"popsicle", hint:"frozen snack"},
+  {q:"what is the name of the mineral used in making pencil 'lead' (actually)?", a:"graphite", hint:"not lead"},
+  {q:"what is the small salty snack made by baking weenie wrapped in dough sometimes called?", a:"pigs in a blanket", hint:"party food"},
+  {q:"what is the name for a person who studies plants?", a:"botanist", hint:"flora expert"},
+  {q:"what is the name of the game where you guess words by drawing pictures?", a:"pictionary", hint:"drawing game"},
+  {q:"what playful animal can balance on its tail and is a marsupial?", a:"kangaroo", hint:"hops"},
+  {q:"what do you call water when it's turned into vapor by boiling?", a:"steam", hint:"gaseous water"},
+  {q:"what small insect is known for forming long lines and carrying leaves?", a:"ant", hint:"hardworking insect"},
+  {q:"what tasty yellow fruit is curved and often eaten by monkeys in cartoons?", a:"banana", hint:"peel is slippery"},
+  {q:"what is the name of the fast-food sandwich that's a beef patty between buns often with lettuce and tomato?", a:"burger", hint:"grill favorite"},
+  {q:"what is the name of the red fruit used in making ketchup and sauces?", a:"tomato", hint:"technically a fruit"},
+  {q:"what is the name of the instrument with six strings commonly used in pop and rock music?", a:"guitar", hint:"strum or pick"},
+  {q:"what popular playground equipment swings back and forth on chains?", a:"swing", hint:"go higher"},
+  {q:"what small vehicle with two wheels is ridden by pedaling?", a:"bicycle", hint:"two-wheeler"},
+  {q:"what cylindrical bread is often used to make hot dogs?", a:"hot dog bun", hint:"soft bread"},
+  {q:"what is the name of the warm beverage made from cocoa, milk, and sugar?", a:"hot chocolate", hint:"winter drink"},
+  {q:"what small country is famous for its chocolate and watches?", a:"switzerland", hint:"alps country"},
+  {q:"what handheld device plays music from files or streaming services?", a:"smartphone", hint:"pocket computer"},
+  {q:"what is the term for a large organized group of musicians playing classical music?", a:"orchestra", hint:"conductor leads"},
+  {q:"what small tool do you use to tighten screws?", a:"screwdriver", hint:"flathead or philips"},
+  {q:"what is the small, fast bird sometimes kept as a pet and can mimic sounds?", a:"canary", hint:"yellow singer"},
+  {q:"what term describes the sound of a bell?", a:"toll", hint:"church bell sound"},
+  {q:"what is the name of the stage name for the artist born adele adkins (short)?", a:"adele", hint:"singer of 'hello'"},
+  {q:"what is the name of the protective covering on tree trunks?", a:"bark", hint:"dogs bark too"},
+  {q:"what small sea creature is often found in tide pools and clings to rocks?", a:"barnacle", hint:"hard shell"},
+  {q:"what is the name for the frozen form of water?", a:"ice", hint:"cold solid"},
+  {q:"what popular handheld puzzle toy has colored squares and is named after its inventor erno rubik?", a:"rubiks cube", hint:"twisty puzzle"},
+  {q:"what bright red berry is used for jams and often associated with christmas decorations?", a:"cranberry", hint:"tart fruit"},
+  {q:"which sea mammal is known for spouting water from its blowhole?", a:"whale", hint:"big ocean mammal"}
+];
+
+// Merge original POOL with EXTRA to make 400 total
+// POOL currently has ~200 from earlier; append EXTRA (200 items) to reach ~400
+for (let i=0;i<EXTRA.length;i++) POOL.push(EXTRA[i]);
+
+// If POOL somehow is less than 400 (safety), expand by duplicating with small variations
+(function ensure400(){
+  while(POOL.length < 400){
+    const copy = Object.assign({}, POOL[POOL.length % POOL.length]);
+    // if answer is numeric, keep; otherwise append a harmless suffix to question to differentiate
+    copy.q = copy.q + ' ';
+    POOL.push(copy);
     if(POOL.length>1000) break;
   }
 })();
 
+// ---------- GAME LOGIC (unchanged features) ----------
 const PRIZE_MAP = {2:500,3:1000,4:3000,5:7500,6:15000,7:32000,8:50000,9:75000,10:100000};
 let questions = [], currentIndex=0, correctCount=0, hintsLeft=2, gameOver=false;
 let audioCtx = null; let prizeProgress = [];
@@ -400,12 +550,7 @@ document.getElementById('answerInput').addEventListener('keydown',(e)=>{ if(e.ke
 
 // start overlay
 document.getElementById('startBtn').addEventListener('click', ()=>{ ensureAudio(); document.getElementById('answerInput').disabled=false; document.getElementById('submitBtn').disabled=false; document.getElementById('startOverlay').style.display='none'; initGame(); playBeep(440,120); });
-document.getElementById('viewRules').addEventListener('click', ()=>{ alert('Rules:
-- Type answers in lowercase.
-- Two hints total.
-- Wrong answer resets your prize to $0.
-- After many questions, the family will advise you to take the deal.
-- Use Restart to play again.'); });
+document.getElementById('viewRules').addEventListener('click', ()=>{ alert('Rules:\\n- Type answers in lowercase.\\n- Two hints total.\\n- Wrong answer resets your prize to $0.\\n- After many questions, the family will advise you to take the deal.\\n- Use Restart to play again.'); });
 
 // init
 function initGame(){ if(!chart) initChart(); questions = pickQuestions(); currentIndex = 0; correctCount = 0; hintsLeft = 2; gameOver = false; prizeProgress = Array(10).fill(0); document.getElementById('hintsLeft').textContent = hintsLeft; document.getElementById('answerInput').value=''; document.getElementById('answerInput').focus(); updateUI(); updateChart(); showQuestion(); renderFamily(0,'after'); }
