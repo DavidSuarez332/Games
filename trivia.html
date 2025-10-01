@@ -3,70 +3,142 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>A Difficult Trivia Quiz Worth Monies</title>
+  <title>Trivia and Triumph — Play to Win!</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <style>
-    body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0b1221;color:#e6eef8;margin:0}
-    .card{width:900px;max-width:95%;background:linear-gradient(180deg,#0f1724,#071027);padding:24px;border-radius:16px;box-shadow:0 10px 30px rgba(2,6,23,.6)}
-    h1{margin:0 0 8px;font-size:26px}
-    p.lead{opacity:.9}
-    .qbox{margin-top:18px;padding:18px;background:rgba(255,255,255,.03);border-radius:12px}
-    .controls{display:flex;gap:8px;margin-top:12px}
-    button{background:#1f6feb;border:0;padding:10px 14px;border-radius:10px;color:white;cursor:pointer}
-    button.secondary{background:#334155}
-    button.danger{background:#ef4444}
-    .hidden-answer{background:#081126;padding:12px;border-radius:8px;margin-top:10px;color:#7dd3fc}
-    .money{font-weight:700}
-    .status{margin-top:10px;font-size:14px}
-    .hint-btn{background:#f59e0b}
-    .deal-box{margin-top:12px;padding:12px;background:rgba(255,255,255,.02);border-radius:8px;display:flex;align-items:center;justify-content:space-between}
-    input[type='text']{padding:8px;border-radius:8px;border:0;width:100%;background:#071428;color:#e6eef8}
+    :root{
+      --bg1:#0f1724;--bg2:#07112a;--card:#071428;--accent1:#06b6d4;--accent2:#7c3aed;--accent3:#f97316;--good:#10b981;--bad:#ef4444
+    }
+    *{box-sizing:border-box}
+    body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:#e6eef8;margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .wrap{width:100%;max-width:1200px}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));border-radius:18px;padding:22px;box-shadow:0 12px 40px rgba(2,6,23,.6);border:1px solid rgba(255,255,255,0.03)}
+    header{display:flex;align-items:center;gap:14px}
+    h1{margin:0;font-size:26px;line-height:1.05}
+    .subtitle{opacity:.9;margin-top:6px}
+    .qbox{margin-top:18px;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.00));border:1px solid rgba(255,255,255,0.02)}
+    #question{font-size:18px;margin-bottom:12px}
+    .input-row{display:flex;gap:8px}
+    input[type='text']{flex:1;padding:10px;border-radius:10px;border:0;background:rgba(255,255,255,0.02);color:inherit;font-size:15px}
+    button{border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
+    .btn-primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white}
+    .btn-accent{background:linear-gradient(90deg,var(--accent3),#f43f5e);color:white}
+    .hint-btn{background:linear-gradient(90deg,#f59e0b,#f97316);color:#061123}
+    .secondary{background:rgba(255,255,255,0.03);color:inherit}
+    .status{margin-top:12px;font-size:15px;min-height:1.4em}
+    .answerReveal{margin-top:10px;padding:10px;border-radius:10px;background:rgba(0,0,0,0.25);color:#cdeffd;display:none}
+    .deal-box{margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(90deg,rgba(124,58,237,0.12),rgba(6,182,212,0.06));display:flex;align-items:center;justify-content:space-between}
     .footer{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:13px}
-    .emoji{font-size:20px}
+    .progress{height:12px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent1),var(--accent2));width:0%}
+    .money{font-weight:700;color:var(--accent3)}
+    .confetti{position:fixed;left:0;top:0;pointer-events:none;width:100%;height:100%;overflow:hidden}
+    .confetti span{position:absolute;font-size:24px;animation:fall 3000ms linear forwards}
+    @keyframes fall{0%{transform:translateY(-10vh) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(360deg);opacity:0}}
+    .start-overlay{position:fixed;inset:0;background:linear-gradient(180deg,rgba(2,6,23,0.6),rgba(2,6,23,0.8));display:flex;align-items:center;justify-content:center;z-index:60}
+    .start-card{background:linear-gradient(180deg,#061126,#071428);padding:28px;border-radius:16px;text-align:center;max-width:540px;border:1px solid rgba(255,255,255,0.03)}
+    .brand{font-weight:800;color:var(--accent2)}
+    .family{display:flex;flex-direction:column;gap:10px}
+    .bubble{background:rgba(255,255,255,0.02);padding:10px;border-radius:10px;border-left:4px solid rgba(255,255,255,0.04)}
+    .bubble strong{display:block;margin-bottom:6px}
+    .restart{margin-top:12px;background:linear-gradient(90deg,#06b6d4,#7c3aed);padding:12px;border-radius:10px;color:white;font-weight:800;width:100%}
+    .chart-wrap{height:220px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}.chart-wrap{height:200px}}
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>🧠 A Difficult Trivia Quiz Worth Monies</h1>
-    <p class="lead">10 random questions from a pool of science, math, geography, food & drink, general knowledge, history, important people, fiction, animals, art, and pop culture. Type answers in <strong>all lowercase</strong>. You get 2 hints total. After each question you may accept a DEAL or choose NO DEAL (with sounds). Good luck!</p>
-
-    <div class="qbox">
-      <div id="questionArea">
-        <div id="qnum"></div>
-        <div id="question" style="font-size:18px;margin-top:8px"></div>
-      </div>
-
-      <div style="margin-top:12px;display:flex;gap:8px;">
-        <input id="answerInput" type="text" placeholder="type your answer here in lowercase" autofocus />
-        <button id="submitBtn">Submit ✅</button>
-        <button id="hintBtn" class="hint-btn">Hint 💡 (<span id="hintsLeft">2</span>)</button>
-      </div>
-
-      <div class="status" id="status"></div>
-
-      <div id="dealArea" style="display:none">
-        <div class="deal-box">
-          <div id="dealText"></div>
+  <div class="confetti" id="confetti"></div>
+  <div class="wrap">
+    <div class="grid">
+      <div class="card">
+        <header>
+          <div style="font-size:44px">🎯</div>
           <div>
-            <button id="dealBtn">Deal 💰</button>
-            <button id="noDealBtn" class="secondary">No Deal ✖️</button>
+            <h1>🎯 <span class="brand">Trivia and Triumph</span> 🏆</h1>
+            <div class="subtitle">10 random questions • 200+ pool • Type answers in <strong>all lowercase</strong> • 2 hints • Deal or No Deal</div>
           </div>
+        </header>
+
+        <div class="qbox">
+          <div id="qnum"></div>
+          <div id="question">Press Start to begin</div>
+
+          <div class="input-row" style="margin-top:12px">
+            <input id="answerInput" type="text" placeholder="type your answer here in lowercase" disabled />
+            <button id="submitBtn" class="btn-primary" disabled>Submit ✅</button>
+            <button id="hintBtn" class="hint-btn">Hint 💡 (<span id="hintsLeft">2</span>)</button>
+          </div>
+
+          <div class="status" id="status"></div>
+
+          <div id="dealArea" style="display:none">
+            <div class="deal-box">
+              <div id="dealText"></div>
+              <div>
+                <button id="dealBtn" class="btn-accent">Deal 💰</button>
+                <button id="noDealBtn" class="secondary">No Deal ✖️</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="answerReveal" class="answerReveal"></div>
+
+          <div style="margin-top:12px">
+            <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+          </div>
+
+          <div class="footer">
+            <div>Question <span id="current">0</span> / 10</div>
+            <div>Correct: <span id="correctCount">0</span> | Potential prize now: <span class="money" id="currentPrize">$0</span></div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button id="restartBtn" class="restart" style="display:none">Restart Game ↺</button>
+            <div style="flex:1"></div>
+          </div>
+
         </div>
       </div>
 
-      <div id="answerReveal" class="hidden-answer" style="display:none"></div>
-
-      <div class="footer">
-        <div>Question <span id="current">0</span> / 10</div>
-        <div>Correct: <span id="correctCount">0</span> | Potential prize if stopped now: <span class="money" id="currentPrize">$0</span></div>
-      </div>
-
+      <aside>
+        <div class="card">
+          <h3 style="margin:0 0 8px">Prize Progress</h3>
+          <div class="chart-wrap">
+            <canvas id="prizeChart"></canvas>
+          </div>
+          <div style="margin-top:12px">
+            <strong>Family Reactions</strong>
+            <div class="family" id="familyPanel">
+              <!-- bubbles inserted here -->
+            </div>
+          </div>
+          <div style="margin-top:10px;font-size:12px;opacity:.9">Tip: As money rises the family will push for taking the deal. If you lose a question your prize resets to $0.</div>
+        </div>
+      </aside>
     </div>
-
-    <div style="margin-top:14px;font-size:13px;opacity:.9">Rules: answers must be typed in <strong>all lowercase</strong>. Use hints sparingly. You may accept a deal after any question — if you accept the deal the game ends and you win that cash. If you finish all 10 questions the final earning is based on the number of correct answers.</div>
   </div>
 
+  <div class="start-overlay" id="startOverlay">
+    <div class="start-card">
+      <h2 style="margin:0 0 8px">Welcome to <span class="brand">Trivia and Triumph</span> 🎲</h2>
+      <p style="margin:0 0 14px">Click Start to enable sounds and begin. Use Restart if you want to play again at any time.</p>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+        <button id="startBtn" class="btn-primary">Start Game ▶️</button>
+        <button id="viewRules" class="secondary">View Rules</button>
+      </div>
+      <div class="small" style="margin-top:12px">To publish on GitHub Pages root, rename to <code>index.html</code>. Otherwise use <code>https://&lt;username&gt;.github.io/Games/trivia.html</code></div>
+    </div>
+  </div>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-// A big pool of 200 questions. Each item: {q: 'question', a: 'answer', hint: 'hint'} answers are lowercase single word or short phrases
+// ----------------------------
+// Trivia and Triumph — updated
+// ----------------------------
+
 const POOL = [
   {q:"what prime number comes after 47?", a:"53", hint:"it's between 50 and 55"},
   {q:"what is the chemical symbol for gold?", a:"au", hint:"same as 'aurum'"},
@@ -205,15 +277,15 @@ const POOL = [
   {q:"what mathematician is famous for a last theorem proved by andrew wiles?", a:"fermat", hint:"little theorem?"},
   {q:"what is the chemical formula for carbon dioxide?", a:"co2", hint:"exhaled gas"},
   {q:"what is the primary ingredient in traditional paella besides rice?", a:"saffron", hint:"gives yellow color"},
-  {q:"which author wrote 'the catcher in the rye'?", a:"j d salinger", hint:"holden caulfield"},
+  {q:"which author wrote 'the catcher in the rye'", a:"j d salinger", hint:"holden caulfield"},
   {q:"what is the capital of south africa (one of the three)?", a:"cape town", hint:"legislative capital"},
   {q:"what famous scientist developed the laws of motion?", a:"isaac newton", hint:"apple anecdote"},
   {q:"what sea creature has eight arms?", a:"octopus", hint:"smart cephalopod"},
   {q:"what is the term for an angle greater than 90 but less than 180?", a:"obtuse", hint:"blunt"},
-  {q:"who sang 'thriller'?", a:"michael jackson", hint:"king of pop"},
+  {q:"who sang 'thriller'?,", a:"michael jackson", hint:"king of pop"},
   {q:"what vitamin is produced by sunlight exposure?", a:"vitamin d", hint:"bone health"},
   {q:"what is the capital of germany?", a:"berlin", hint:"brandenburg gate"},
-  {q:"who wrote the 20th-century play 'waiting for godot'?", a:"samuel beckett", hint:"absurdist"},
+  {q:"who wrote the 20th-century play 'waiting for godot'", a:"samuel beckett", hint:"absurdist"},
   {q:"what is the largest species of shark?", a:"whale shark", hint:"filter feeder"},
   {q:"which planet is known for its rings?", a:"saturn", hint:"beautiful rings"},
   {q:"what is the SI unit of electric current?", a:"ampere", hint:"amps"},
@@ -228,167 +300,121 @@ const POOL = [
   {q:"what is the mathematical constant e approx?", a:"2.718", hint:"base of natural logs"}
 ];
 
-// If the pool length is less than 200 we could replicate or shuffle variations to reach 200. For this implementation we'll create a pool of exactly 200 by duplicating and permuting small changes if needed
+// expand to at least 200 entries by duplicating if needed
 (function expandPool(){
   while(POOL.length < 200){
     const base = POOL[POOL.length % POOL.length];
-    // duplicate with small suffix so not identical but valid
-    const copy = {q: base.q + "", a: base.a, hint: base.hint};
-    POOL.push(copy);
+    POOL.push({q: base.q, a: base.a, hint: base.hint});
     if(POOL.length>1000) break;
   }
 })();
 
-// prize map based on final correct answers
 const PRIZE_MAP = {2:500,3:1000,4:3000,5:7500,6:15000,7:32000,8:50000,9:75000,10:100000};
+let questions = [], currentIndex=0, correctCount=0, hintsLeft=2, gameOver=false;
+let audioCtx = null; let prizeProgress = [];
 
-let questions = [];
-let currentIndex = 0;
-let correctCount = 0;
-let hintsLeft = 2;
-let usedDeal = false;
-let gameOver = false;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+function pickQuestions(){const c=POOL.slice();shuffle(c);return c.slice(0,10);} 
 
-// utilities
-function shuffle(a){
-  for(let i=a.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];
-  }
+function ensureAudio(){ if(audioCtx) return; audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+function playBeep(freq=440, dur=120, type='sine', vol=0.06){ try{ ensureAudio(); const o=audioCtx.createOscillator(); const g=audioCtx.createGain(); o.type=type; o.frequency.value=freq; g.gain.value=vol; o.connect(g); g.connect(audioCtx.destination); o.start(); setTimeout(()=>{ o.stop(); }, dur); }catch(e){console.log(e);} }
+function playCorrect(){ playBeep(660,90); setTimeout(()=>playBeep(880,100),90); setTimeout(()=>playBeep(1100,120),190); }
+function playIncorrect(){ playBeep(120,220,'sawtooth',0.08); }
+function playDeal(){ playBeep(880,130); setTimeout(()=>playBeep(660,120),120); }
+function playNoDeal(){ playBeep(180,80); setTimeout(()=>playBeep(220,80),90); }
+function playWin(){ for(let i=0;i<5;i++){ setTimeout(()=>playBeep(600 + i*80,140), i*120); } }
+
+// Chart.js setup
+let chart = null;
+function initChart(){ const ctx = document.getElementById('prizeChart').getContext('2d'); chart = new Chart(ctx, { type: 'line', data: { labels: Array.from({length:10}, (_,i)=>'Q'+(i+1)), datasets:[{label:'Prize ($)',data:Array(10).fill(0),fill:false,borderColor:'#06b6d4',backgroundColor:'#7c3aed',tension:0.3,pointRadius:6}] }, options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}}} }); }
+function updateChart(){ if(!chart) return; const data = chart.data.datasets[0].data; for(let i=0;i<10;i++){ data[i] = prizeProgress[i] || 0; } chart.update(); }
+
+// family panel
+const FAMILY = ['mom','dad','sibling','cousin','friend1','friend2'];
+function familyAdvice(prize, stage){ // stage: 'after' or 'deal'
+  // advice becomes more conservative as prize grows
+  const adv = [];
+  FAMILY.forEach((member,idx)=>{
+    let text='';
+    if(prize <= 1000) text = "don't take the deal — keep going! 💪";
+    else if(prize <= 7500) text = (idx%2===0) ? "you're close, maybe think about it... 🤔" : "keep going, you got this!";
+    else if(prize <= 32000) text = "this is getting big — consider taking the deal! 😬";
+    else text = "take the deal now! this is a lot of money! 🤑";
+    // make deals more forceful at deal stage
+    if(stage === 'deal' && prize >= 15000) text = "take the deal — safely cash out! 🏦";
+    adv.push({member, text});
+  });
+  return adv;
 }
 
-function pickQuestions(){
-  const copy = POOL.slice();
-  shuffle(copy);
-  return copy.slice(0,10);
-}
+function renderFamily(prize, stage){ const panel = document.getElementById('familyPanel'); panel.innerHTML = ''; const adv = familyAdvice(prize, stage); adv.forEach(a=>{
+    const d = document.createElement('div'); d.className = 'bubble'; d.innerHTML = `<strong>${a.member}</strong><div>${a.text}</div>`; panel.appendChild(d);
+  }); }
 
-function playTone(type){
-  try{
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.connect(g);g.connect(ctx.destination);
-    if(type==='deal'){o.frequency.value=880;} else {o.frequency.value=220;}
-    o.type='sine';g.gain.value=0.05;
-    o.start();
-    setTimeout(()=>{o.stop();ctx.close();},200);
-  }catch(e){console.log('audio err',e)}
-}
+function triggerConfetti(){ const C = document.getElementById('confetti'); const emojis = ['🎉','🎊','🏆','💰','✨']; for(let i=0;i<40;i++){ const s = document.createElement('span'); s.textContent = emojis[Math.floor(Math.random()*emojis.length)]; s.style.left = (Math.random()*100)+'%'; s.style.fontSize = (12 + Math.random()*28) + 'px'; s.style.animationDuration = (2000 + Math.random()*1800)+'ms'; C.appendChild(s); setTimeout(()=>{ s.remove(); }, 4500); } }
 
-function updateUI(){
-  document.getElementById('current').textContent = currentIndex+1;
-  document.getElementById('correctCount').textContent = correctCount;
-  const prizeNow = PRIZE_MAP[correctCount] || 0;
-  document.getElementById('currentPrize').textContent = "$" + prizeNow.toLocaleString();
-}
+function updateUI(){ document.getElementById('current').textContent = Math.min(currentIndex+1, questions.length); document.getElementById('correctCount').textContent = correctCount; const prizeNow = PRIZE_MAP[correctCount] || 0; document.getElementById('currentPrize').textContent = "$"+prizeNow.toLocaleString(); const pct = Math.round((currentIndex/10)*100); document.getElementById('progressBar').style.width = pct + '%'; }
 
-function showQuestion(){
-  if(currentIndex >= questions.length){
-    endGame();return;
-  }
-  const q = questions[currentIndex];
-  document.getElementById('qnum').textContent = "Question " + (currentIndex+1);
-  document.getElementById('question').textContent = q.q + " " + "🔎";
-  document.getElementById('answerReveal').style.display='none';
-  document.getElementById('status').textContent = '';
-  document.getElementById('answerInput').value='';
-  updateUI();
-}
+function showQuestion(){ if(currentIndex >= questions.length){ endGame(); return; } const q = questions[currentIndex]; document.getElementById('qnum').textContent = 'Question '+(currentIndex+1); document.getElementById('question').textContent = q.q + ' 🔎'; document.getElementById('answerReveal').style.display='none'; document.getElementById('status').textContent=''; document.getElementById('answerInput').value=''; updateUI(); renderFamily(prizeProgress[currentIndex] || 0, 'after'); }
 
-function offerDeal(){
-  const offer = PRIZE_MAP[correctCount] || 0;
-  const dealText = offer>0 ? `Banker offers: $${offer.toLocaleString()}. Take the deal?` : 'Banker offers $0.';
-  document.getElementById('dealText').textContent = dealText;
-  document.getElementById('dealArea').style.display='block';
-}
+function offerDeal(){ const offer = PRIZE_MAP[correctCount] || 0; const dealText = offer>0 ? `Banker offers: $${offer.toLocaleString()}. Take the deal?` : 'Banker offers $0.'; document.getElementById('dealText').textContent = dealText; document.getElementById('dealArea').style.display='block'; renderFamily(offer, 'deal'); }
+function hideDeal(){ document.getElementById('dealArea').style.display='none'; }
 
-function hideDeal(){document.getElementById('dealArea').style.display='none';}
+function endGame(finalDealAmount){ gameOver=true; document.getElementById('question').textContent = 'Game over 🎉'; document.getElementById('qnum').textContent=''; document.getElementById('answerInput').disabled=true; document.getElementById('submitBtn').disabled=true; hideDeal(); document.getElementById('restartBtn').style.display='block'; let finalText=''; if(finalDealAmount){ finalText = `You accepted the deal and won $${finalDealAmount.toLocaleString()} 🎉`; } else { const finalPrize = PRIZE_MAP[correctCount] || 0; finalText = `You finished. Correct: ${correctCount}. Prize: $${finalPrize.toLocaleString()}.`; } document.getElementById('status').textContent = finalText; if((PRIZE_MAP[correctCount] || 0) > 0 || finalDealAmount){ triggerConfetti(); playWin(); } }
 
-function endGame(finalDealAmount){
-  gameOver = true;
-  document.getElementById('question').textContent = 'Game over 🎉';
-  document.getElementById('qnum').textContent = '';
-  document.getElementById('answerInput').disabled=true;
-  document.getElementById('submitBtn').disabled=true;
-  hideDeal();
-  let finalText='';
-  if(finalDealAmount){ finalText = `You accepted the deal and won $${finalDealAmount.toLocaleString()} 🎉`;
-  } else {
-    const finalPrize = PRIZE_MAP[correctCount] || 0;
-    finalText = `You finished. Correct: ${correctCount}. Prize: $${finalPrize.toLocaleString()}.`;
-  }
-  document.getElementById('status').textContent = finalText;
-}
+// main handlers
+function submitAnswer(){ if(gameOver) return; const ans = document.getElementById('answerInput').value.trim().toLowerCase(); const q = questions[currentIndex]; if(ans==='') return; if(ans === (q.a + '').toLowerCase()){ correctCount++; const prizeNow = PRIZE_MAP[correctCount] || 0; prizeProgress[currentIndex] = prizeNow; document.getElementById('status').textContent = `Correct! ✅ You now have $${prizeNow.toLocaleString()}`; playCorrect(); } else { // wrong — reset prize
+    document.getElementById('status').textContent = 'Incorrect ❌ — you lost your accumulated prize. Restart or keep playing to rebuild.'; document.getElementById('answerReveal').style.display='block'; document.getElementById('answerReveal').textContent = 'Answer: ' + q.a + ' 🔒'; playIncorrect(); // reset accumulated progress
+    correctCount = 0; // reset prize mapping
+    // record zero for this question point
+    prizeProgress[currentIndex] = 0;
+    // also clear any subsequent planned winnings
+    for(let i=currentIndex+1;i<10;i++) prizeProgress[i] = 0;
+    updateChart();
+    document.getElementById('restartBtn').style.display='block';
+    renderFamily(0,'after');
+    currentIndex++;
+    updateUI();
+    // after wrong answer, offer deal? typically not — but we'll still offer as 0
+    setTimeout(()=>{ offerDeal(); }, 350);
+    return; }
+  currentIndex++; updateUI(); updateChart(); if(currentIndex < questions.length){ setTimeout(()=>{ offerDeal(); }, 350); } else { setTimeout(()=>{ endGame(); }, 350); } }
 
-// event handlers
-document.getElementById('submitBtn').addEventListener('click',()=>{
-  if(gameOver) return;
-  const ans = document.getElementById('answerInput').value.trim().toLowerCase();
-  const q = questions[currentIndex];
-  if(ans==='') return;
-  if(ans === q.a.toLowerCase()){
-    correctCount++;
-    document.getElementById('status').textContent = 'Correct! ✅';
-  } else {
-    document.getElementById('status').textContent = 'Incorrect ❌';
-    document.getElementById('answerReveal').style.display='block';
-    document.getElementById('answerReveal').textContent = 'Answer (hidden until after submit): ' + q.a + ' 🔒';
-  }
-  // after each question, offer deal
-  currentIndex++;
-  updateUI();
-  if(currentIndex < questions.length){
-    // small delay then show deal
-    setTimeout(()=>{ offerDeal(); },400);
-  } else {
-    // finished all questions
-    setTimeout(()=>{ endGame(); },400);
-  }
-});
+// hint
+function useHint(){ if(gameOver) return; if(hintsLeft <= 0){ alert('No hints left'); return; } const q = questions[currentIndex]; hintsLeft--; document.getElementById('hintsLeft').textContent = hintsLeft; document.getElementById('status').textContent = 'Hint: ' + q.hint + ' 💡'; }
 
-// hint button
-document.getElementById('hintBtn').addEventListener('click',()=>{
-  if(gameOver) return;
-  if(hintsLeft <= 0){ alert('No hints left'); return; }
-  const q = questions[currentIndex];
-  hintsLeft--;
-  document.getElementById('hintsLeft').textContent = hintsLeft;
-  document.getElementById('status').textContent = 'Hint: ' + q.hint + ' 💡';
-});
+// deal/no-deal
+function takeDeal(){ if(gameOver) return; const offer = PRIZE_MAP[correctCount] || 0; playDeal(); hideDeal(); endGame(offer); }
+function noDeal(){ if(gameOver) return; playNoDeal(); hideDeal(); if(currentIndex < questions.length) showQuestion(); }
 
-// deal/no deal
-document.getElementById('dealBtn').addEventListener('click',()=>{
-  if(gameOver) return;
-  const offer = PRIZE_MAP[correctCount] || 0;
-  playTone('deal');
-  hideDeal();
-  endGame(offer);
-});
+// restart
+function restartGame(){ document.getElementById('restartBtn').style.display='none'; questions = pickQuestions(); currentIndex = 0; correctCount = 0; hintsLeft = 2; gameOver = false; prizeProgress = []; for(let i=0;i<10;i++) prizeProgress.push(0); document.getElementById('hintsLeft').textContent = hintsLeft; document.getElementById('answerInput').disabled=false; document.getElementById('submitBtn').disabled=false; updateChart(); updateUI(); showQuestion(); }
 
-document.getElementById('noDealBtn').addEventListener('click',()=>{
-  if(gameOver) return;
-  playTone('nodeal');
-  hideDeal();
-  // continue to next question
-  if(currentIndex < questions.length) showQuestion();
-});
+// keyboard enter
+document.getElementById('submitBtn').addEventListener('click', submitAnswer);
+document.getElementById('hintBtn').addEventListener('click', useHint);
+document.getElementById('dealBtn').addEventListener('click', takeDeal);
+document.getElementById('noDealBtn').addEventListener('click', noDeal);
+document.getElementById('restartBtn').addEventListener('click', restartGame);
+document.getElementById('answerInput').addEventListener('keydown',(e)=>{ if(e.key==='Enter') submitAnswer(); });
 
-// keyboard: enter to submit
-document.getElementById('answerInput').addEventListener('keydown',(e)=>{
-  if(e.key === 'Enter') document.getElementById('submitBtn').click();
-});
+// start overlay
+document.getElementById('startBtn').addEventListener('click', ()=>{ ensureAudio(); document.getElementById('answerInput').disabled=false; document.getElementById('submitBtn').disabled=false; document.getElementById('startOverlay').style.display='none'; initGame(); playBeep(440,120); });
+document.getElementById('viewRules').addEventListener('click', ()=>{ alert('Rules:
+- Type answers in lowercase.
+- Two hints total.
+- Wrong answer resets your prize to $0.
+- After many questions, the family will advise you to take the deal.
+- Use Restart to play again.'); });
 
-// start
-function init(){
-  questions = pickQuestions();
-  currentIndex = 0; correctCount = 0; hintsLeft = 2; gameOver = false;
-  document.getElementById('hintsLeft').textContent = hintsLeft;
-  document.getElementById('answerInput').disabled=false;
-  document.getElementById('submitBtn').disabled=false;
-  showQuestion();
-}
+// init
+function initGame(){ if(!chart) initChart(); questions = pickQuestions(); currentIndex = 0; correctCount = 0; hintsLeft = 2; gameOver = false; prizeProgress = Array(10).fill(0); document.getElementById('hintsLeft').textContent = hintsLeft; document.getElementById('answerInput').value=''; document.getElementById('answerInput').focus(); updateUI(); updateChart(); showQuestion(); renderFamily(0,'after'); }
 
-init();
+// minimal on load
+(function(){ document.getElementById('status').textContent = 'Click Start to enable sounds and begin your challenge! 🎵'; // prepare empty chart dataset
+  prizeProgress = Array(10).fill(0);
+  initChart(); updateChart(); renderFamily(0,'after'); })();
+
 </script>
 </body>
 </html>
