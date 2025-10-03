@@ -1,2 +1,2 @@
 # Games
-(index) - Trivia and Triumph
+click on "index" - Trivia and Triumph
