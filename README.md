@@ -1,2 +1,2 @@
 # Games
-Holding Games in this repository
+(index) - Trivia and Triumph
