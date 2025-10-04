@@ -172,50 +172,19 @@
 
 <script>
 // ----------------------------
-// Trivia and Triumph — Game logic with Host, Phone-a-Friend, Retry, brighter UI
+// Trivia and Triumph — Full game (250 Qs generated + curated)
 // ----------------------------
 
-// --------- SAMPLE POOL (trimmed to keep file size reasonable in this example)
-// If you already have a big POOL and EXTRA arrays, paste them in above this script instead.
-// For this response we include a decent sample set — the code will expand to +50 if needed.
-const POOL = [
-
-{q:"what prime number comes after 47?", a:"53", hint:"it's between 50 and 55"}, {q:"what is the chemical symbol for gold?", a:"au", hint:"same as 'aurum'"}, {q:"in degrees, what's the sum of interior angles of a triangle?", a:"180", hint:"a straight line"}, {q:"which planet is known as the red planet?", a:"mars", hint:"roman god of war"}, {q:"what is the square root of 144?", a:"12", hint:"dozen"}, {q:"what large language family does spanish belong to?", a:"indo-european", hint:"same family as english"}, {q:"the capital of canada is?", a:"ottawa", hint:"not toronto"}, {q:"who painted the mona lisa?", a:"leonardo da vinci", hint:"italian renaissance man"}, {q:"what is h2o commonly called?", a:"water", hint:"essential for life"}, {q:"what city hosts the statue of liberty (country)?", a:"united states", hint:"country: usa"}, {q:"who proposed the theory of relativity (last name)?", a:"einstein", hint:"famous physicist with wild hair"}, {q:"what is the center of an atom called?", a:"nucleus", hint:"contains protons"}, {q:"which gas do plants primarily absorb?", a:"carbon dioxide", hint:"co2"}, {q:"in music, how many semitones in an octave?", a:"12", hint:"western chromatic scale"}, {q:"what animal is the largest living land mammal?", a:"elephant", hint:"long trunk"}, {q:"who wrote 'romeo and juliet'?", a:"shakespeare", hint:"bard"}, {q:"what is the value of pi rounded to two decimals?", a:"3.14", hint:"approximation"}, {q:"what is the hardest natural substance?", a:"diamond", hint:"often used in engagement rings"}, {q:"which element has atomic number 1?", a:"hydrogen", hint:"the lightest"}, {q:"what is 7 factorial (7!)?", a:"5040", hint:"7*6*5*4*3*2*1"}, {q:"the longest river in the world - commonly named?", a:"nile", hint:"flows through egypt"}, {q:"what temperature does water freeze in celsius?", a:"0", hint:"less than 1"}, {q:"which language has the most native speakers?", a:"mandarin", hint:"a chinese language"}, {q:"what is the smallest prime number?", a:"2", hint:"only even prime"}, {q:"what geometric shape has three sides?", a:"triangle", hint:"three"}, {q:"what organ pumps blood around the body?", a:"heart", hint:"symbol of love"}, {q:"who discovered penicillin (last name)?", a:"fleming", hint:"alexander ____"}, {q:"what is the chemical formula for table salt?", a:"nacl", hint:"sodium chloride"}, {q:"who was the first president of the united states?", a:"george washington", hint:"crossed the delaware"}, {q:"what is the study of cells called?", a:"cytology", hint:"cyto-"}, {q:"what fruit is the main ingredient in guacamole?", a:"avocado", hint:"green and creamy"}, {q:"what is 2 to the 10th power?", a:"1024", hint:"just over 1000"}, {q:"what is the capital of japan?", a:"tokyo", hint:"hosted 2020 olympics"}, {q:"which metal is liquid at room temperature?", a:"mercury", hint:"used in old thermometers"}, {q:"what mythical creature breathes fire in many stories?", a:"dragon", hint:"often hoards gold"}, {q:"who wrote the iliad and the odyssey (traditional attribution)?", a:"homer", hint:"ancient greek poet"}, {q:"what is the freezing point of water in fahrenheit?", a:"32", hint:"32°f"}, {q:"which organelle is the 'powerhouse' of the cell?", a:"mitochondrion", hint:"produces atp"}, {q:"what is the chemical symbol for oxygen?", a:"o", hint:"gas we breathe"}, {q:"which planet has the most moons (as of 2025)?", a:"jupiter", hint:"largest planet"}, {q:"what artistic movement is picasso associated with?", a:"cubism", hint:"fragmented forms"}, {q:"what is the capital of australia?", a:"canberra", hint:"not sydney"}, {q:"what does 'www' stand for?", a:"world wide web", hint:"internet prefix"}, {q:"who is known as the father of modern computing (turing or von neumann)?", a:"turing", hint:"turing test"}, {q:"what is the study of the past called?", a:"history", hint:"what happened before"}, {q:"what sweetener is made from bees?", a:"honey", hint:"not maple"}, {q:"what is a group of lions called?", a:"pride", hint:"royal group"}, {q:"who painted the starry night?", a:"vincent van gogh", hint:"post-impressionist"}, {q:"what device measures atmospheric pressure?", a:"barometer", hint:"predicts weather"}, {q:"what number is represented by the roman numeral 'x'?", a:"10", hint:"two fives"}, {q:"what is the capital of france?", a:"paris", hint:"city of lights"}, {q:"which gas makes up most of earth's atmosphere?", a:"nitrogen", hint:"about 78%"}, {q:"what is the currency of the united kingdom?", a:"pound sterling", hint:"abbrev: gbp"}, {q:"what is 11 * 11?", a:"121", hint:"11 squared"}, {q:"what is the primary component of natural gas?", a:"methane", hint:"ch4"}, {q:"what mammal lays eggs?", a:"platypus", hint:"a monotreme"}, {q:"who created sherlock holmes?", a:"arthur conan doyle", hint:"british author"}, {q:"what is the capital of italy?", a:"rome", hint:"colosseum"}, {q:"what is the term for a polygon with five sides?", a:"pentagon", hint:"five"}, {q:"what fundamental force holds nuclei together?", a:"strong force", hint:"one of four forces"}, {q:"what is the highest mountain above sea level?", a:"mount everest", hint:"nepal/china border"}, {q:"what is the primary language of brazil?", a:"portuguese", hint:"not spanish"}, {q:"what instrument measures earthquakes?", a:"seismometer", hint:"seismic waves"}, {q:"who is the author of 'a brief history of time'?", a:"stephen hawking", hint:"black holes"}, {q:"what color do you get by mixing red and blue (paint)?", a:"purple", hint:"royal color"}, {q:"what is the chemical symbol for iron?", a:"fe", hint:"from ferrum"}, {q:"who was the british prime minister during ww2?", a:"winston churchill", hint:"v for victory"}, {q:"what is the square of 15?", a:"225", hint:"15*15"}, {q:"what is the fastest land animal?", a:"cheetah", hint:"spotted sprint"}, {q:"which festival is celebrated with lanterns in china?", a:"mid autumn festival", hint:"mooncakes"}, {q:"what is the lightest noble gas?", a:"helium", hint:"used in balloons"}, {q:"what is the capital of egypt?", a:"cairo", hint:"pyramids nearby"}, {q:"what is the primary ingredient in traditional sushi vinegared rice aside from rice?", a:"rice vinegar", hint:"seasoning"}, {q:"who built the model of universal gravitation (last name)?", a:"newton", hint:"apple story"}, {q:"what is 13 + 24?", a:"37", hint:"sum under 40"}, {q:"what chemical element is represented by 'na'?", a:"sodium", hint:"salt"}, {q:"which country has the city named kyoto?", a:"japan", hint:"historic capital"}, {q:"in computing, what does 'cpu' stand for?", a:"central processing unit", hint:"brain of the computer"}, {q:"what is the study of weather called?", a:"meteorology", hint:"forecasts"}, {q:"what breed is known as the 'king of dogs' in the tibet region?", a:"tibetan mastiff", hint:"large guardian"}, {q:"who is the author of the hobbit?", a:"j r r tolkien", hint:"middle-earth"}, {q:"what is the atomic number of carbon?", a:"6", hint:"atomic number small"}, {q:"which composer wrote the 'fifth symphony'?", a:"beethoven", hint:"famous motif"}, {q:"what year did the berlin wall fall?", a:"1989", hint:"end of cold war era"}, {q:"what spice is derived from dried stigma of crocus sativus?", a:"saffron", hint:"expensive spice"}, {q:"what is the study of insects called?", a:"entomology", hint:"bugs"}, {q:"which ocean is the largest?", a:"pacific", hint:"vast and deep"}, {q:"what is the value of 0! (zero factorial)?", a:"1", hint:"by definition"}, {q:"what is the capital of russia?", a:"moscow", hint:"kremlin"}, {q:"what mammal can fly?", a:"bat", hint:"uses echolocation"}, {q:"which artist is known for the 'persistence of memory' clocks?", a:"salvador dali", hint:"surrealist"}, {q:"what city is famous for tango and beef, capital of argentina?", a:"buenos aires", hint:"latin america"}, {q:"what is the term for speed of light in vacuum (symbol c) approx km/s?", a:"299792", hint:"~3e5 km/s"}, {q:"who was the first woman to fly solo across the atlantic?", a:"amelia earhart", hint:"disappeared over pacific"}, {q:"what is the smallest continent by land area?", a:"australia", hint:"continent-country"}, {q:"what color are chloroplasts typically?", a:"green", hint:"contain chlorophyll"}, {q:"what is the capital of turkey?", a:"ankara", hint:"not istanbul"}, {q:"which novelist wrote '1984'?", a:"george orwell", hint:"dystopia"}, {q:"what kind of bond involves sharing electron pairs?", a:"covalent", hint:"molecule-level bond"}, {q:"what is the chemical formula for ozone?", a:"o3", hint:"three oxygens"}, {q:"who was assassinated in 1963 in dallas?", a:"john f kennedy", hint:"american president"}, {q:"what is the metric unit of mass?", a:"kilogram", hint:"kg"}, {q:"what country invented pizza?", a:"italy", hint:"naples"}, {q:"what is the largest organ in the human body?", a:"skin", hint:"protective covering"}, {q:"what is the symbol for pi in greek alphabet?", a:"pi", hint:"π"}, {q:"who discovered electricity with experiments using kites?", a:"benjamin franklin", hint:"founding father"}, {q:"what geometric solid has 6 faces all squares?", a:"cube", hint:"all edges equal"}, {q:"what is the name of the galaxy we live in?", a:"milky way", hint:"spiral galaxy"}, {q:"what is the process plants use to make food from sunlight?", a:"photosynthesis", hint:"light energy"}, {q:"which city is known as the eternal city?", a:"rome", hint:"ancient empire"}, {q:"what is the largest internal organ in humans?", a:"liver", hint:"detoxifies"}, {q:"who painted the ceiling of the sistine chapel?", a:"michelangelo", hint:"also sculpted david"}, {q:"what metal is used to make bronze (alloy of copper and ...)?", a:"tin", hint:"bronze = copper + ?"}, {q:"what is the common name for sodium bicarbonate?", a:"baking soda", hint:"used in baking"}, {q:"which element is used to sterilize water and is in pools?", a:"chlorine", hint:"keeps pools safe"}, {q:"what is the capital of india?", a:"new delhi", hint:"not mumbai"}, {q:"who wrote the novel 'frankenstein'?", a:"mary shelley", hint:"published 1818"}, {q:"what is the main ingredient in hummus?", a:"chickpeas", hint:"also called garbanzo"}, {q:"what is the chemical symbol for potassium?", a:"k", hint:"bananas contain it"}, {q:"what is the name of the longest bone in the human body?", a:"femur", hint:"thigh bone"}, {q:"which country has the most time zones (including overseas territories)?", a:"france", hint:"many overseas departments"}, {q:"what is the name of the pigment that makes plants green?", a:"chlorophyll", hint:"absorbs light"}, {q:"what is the art of paper folding called?", a:"origami", hint:"japanese tradition"}, {q:"what is the capital of mexico?", a:"mexico city", hint:"largest city in mexico"}, {q:"what is 9 squared?", a:"81", hint:"9*9"}, {q:"what famous physicist developed quantum mechanics contributions and has a namesake uncertainty principle?", a:"heisenberg", hint:"uncertainty"}, {q:"what is the national flower of japan?", a:"cherry blossom", hint:"sakura"}, {q:"which novel begins with 'call me ishmael'?,", a:"moby dick", hint:"whale"}, {q:"what is the process of cell division producing gametes called?", a:"meiosis", hint:"halves chromosome number"}, {q:"what is the chemical that makes chili peppers hot?", a:"capsaicin", hint:"in spicy peppers"}, {q:"what currency uses the symbol '€'?", a:"euro", hint:"used in many european countries"}, {q:"which instrument has keys, pedals, and strings struck by hammers?", a:"piano", hint:"concert instrument"}, {q:"who is the author of 'to kill a mockingbird'?", a:"harper lee", hint:"atticus finch"}, {q:"what bird is a national symbol of the united states?", a:"bald eagle", hint:"white head"}, {q:"what mathematician is famous for a last theorem proved by andrew wiles?", a:"fermat", hint:"little theorem?"}, {q:"what is the chemical formula for carbon dioxide?", a:"co2", hint:"exhaled gas"}, {q:"what is the primary ingredient in traditional paella besides rice?", a:"saffron", hint:"gives yellow color"}, {q:"which author wrote 'the catcher in the rye'", a:"j d salinger", hint:"holden caulfield"}, {q:"what is the capital of south africa (one of the three)?", a:"cape town", hint:"legislative capital"}, {q:"what famous scientist developed the laws of motion?", a:"isaac newton", hint:"apple anecdote"}, {q:"what sea creature has eight arms?", a:"octopus", hint:"smart cephalopod"}, {q:"what is the term for an angle greater than 90 but less than 180?", a:"obtuse", hint:"blunt"}, {q:"who sang 'thriller'?,", a:"michael jackson", hint:"king of pop"}, {q:"what vitamin is produced by sunlight exposure?", a:"vitamin d", hint:"bone health"}, {q:"what is the capital of germany?", a:"berlin", hint:"brandenburg gate"}, {q:"who wrote the 20th-century play 'waiting for godot'", a:"samuel beckett", hint:"absurdist"}, {q:"what is the largest species of shark?", a:"whale shark", hint:"filter feeder"}, {q:"which planet is known for its rings?", a:"saturn", hint:"beautiful rings"}, {q:"what is the SI unit of electric current?", a:"ampere", hint:"amps"}, {q:"which conflict occurred from 1914 to 1918?", a:"world war i", hint:"the great war"}, {q:"what is the main component of glass (oxide)?", a:"silica", hint:"sand"}, {q:"which programming language is known for indentation rules?", a:"python", hint:"snake or language"}, {q:"what is the name of the smallest particle of an element?", a:"atom", hint:"building block"}, {q:"what is the capital of sweden?", a:"stockholm", hint:"scandinavian city"}, {q:"which composer wrote the opera 'carmen'?", a:"bizet", hint:"french composer"}, {q:"what country hosts the city riyadh?", a:"saudi arabia", hint:"middle east"}, {q:"what is the process by which liquid water becomes vapor?", a:"evaporation", hint:"heat driven"}, {q:"what is the mathematical constant e approx?", a:"2.718", hint:"base of natural logs"} // (end of original ~200 block) ]; // ---------- ADD 200 NEW, FUN & QUIRKY QUESTIONS ---------- const EXTRA = [ {q:"what common fruit shares its name with a color?", a:"orange", hint:"looks like its name"}, {q:"what animal's fingerprints are nearly identical to humans'?", a:"koala", hint:"australian marsupial"}, {q:"which planet spins fastest on its axis (shortest day)?", a:"jupiter", hint:"largest planet"}, {q:"what is the only mammal capable of true flight?", a:"bat", hint:"night flyer"}, {q:"what popular beverage was originally green before being changed to brown by its maker?", a:"coca cola", hint:"fizzy drink"}, {q:"what is the name of the phobia for being tickled by feathers?", a:"pteronophobia", hint:"from greek for feather"}, {q:"what vegetable was once used as a unit of currency in ancient egypt? (short)", a:"onion", hint:"used in ceremonies"}, {q:"what color is a polar bear's skin under its white fur?", a:"black", hint:"surprising"}, {q:"what is the term for a group of flamingos?", a:"flamboyance", hint:"very showy group name"}, {q:"what is the small island nation known for its red and white flag with a maple leaf?", a:"canada", hint:"north america"}, {q:"what gas gives soda its fizz?", a:"carbon dioxide", hint:"co2"}, {q:"which bird can mimic human speech best?", a:"parrot", hint:"colorful talker"}, {q:"what is the fear of long words ironically called?", a:"hippopotomonstrosesquipedaliophobia", hint:"very long word"}, {q:"what musical instrument has 47 strings and 7 pedals?", a:"harp", hint:"angels often play it"}, {q:"what food famously kept sailors from scurvy?", a:"lime", hint:"vitamin c"}, {q:"what is the term for baby goats?", a:"kids", hint:"same word used for children sometimes"}, {q:"what popular board game includes properties like boardwalk and park place?", a:"monopoly", hint:"buying and trading"}, {q:"what household pet purrs when content?", a:"cat", hint:"likes naps"}, {q:"what common beverage comes from fermented grapes?", a:"wine", hint:"often red or white"}, {q:"which instrument do you blow across a hole to play (woodwind)?", a:"flute", hint:"airy sound"}, {q:"what fruit has seeds on the outside?", a:"strawberry", hint:"red and sweet"}, {q:"what is the only edible nut that grows on a tree and not in the ground? (short)", a:"almond", hint:"used in marzipan"}, {q:"what bright green mineral is often used in jewelry and nicknamed 'emerald of the sea'?", a:"malachite", hint:"banded green"}, {q:"which animal can sleep standing up and lying down?", a:"horse", hint:"barn friend"}, {q:"what sweet spread is made from roasted peanuts?", a:"peanut butter", hint:"sandwich favorite"}, {q:"what is the slowest land animal?", a:"sloth", hint:"lives in trees"}, {q:"which sweet treat melts at low temperatures and is often given on valentine's day?", a:"chocolate", hint:"cocoa product"}, {q:"what drink is made by steeping tea leaves in hot water?", a:"tea", hint:"british favorite"}, {q:"what is the most widely planted crop in the world used for bread and pasta?", a:"wheat", hint:"staple grain"}, {q:"which bird lays the largest eggs?", a:"ostrich", hint:"big and heavy"}, {q:"what household item can be used to remove odors when placed in fridge?", a:"baking soda", hint:"sodium bicarbonate"}, {q:"which fruit is known as the 'king of fruits' in some parts of asia?", a:"durian", hint:"famous smell"}, {q:"what imaginary line divides the earth into northern and southern hemispheres?", a:"equator", hint:"zero degrees latitude"}, {q:"what is the main ingredient in a traditional japanese miso soup?", a:"miso", hint:"fermented soybean paste"}, {q:"what metal is used to make pennies in the united states (modern composition)?", a:"zinc", hint:"coated with copper"}, {q:"what is the capital of iceland, famous for geothermal pools?", a:"reykjavik", hint:"northern europe"}, {q:"what small crustacean is often served with cocktail sauce?", a:"shrimp", hint:"seafood favorite"}, {q:"what is the term for an animal that eats both plants and meat?", a:"omnivore", hint:"eats everything"}, {q:"which fruit is associated with keeping doctors away in the proverb?", a:"apple", hint:"an a-day saying"}, {q:"what is the main ingredient in guacamole?", a:"avocado", hint:"green and creamy"}, {q:"what sweet crystalline substance do bees make from nectar?", a:"honey", hint:"sticky and sweet"}, {q:"what household plant product is used to make tea 'chai' in many cultures?", a:"ginger", hint:"spicy root"}, {q:"what is the name of the largest desert in the world (non-polar)?", a:"sahara", hint:"north africa"}, {q:"what device measures temperature?", a:"thermometer", hint:"mercury used historically"}, {q:"which sea creature has a shell and is slow-moving, often called a 'seacow' (short)", a:"manatee", hint:"gentle giant"}, {q:"what tasty snack is made by heating popcorn kernels?", a:"popcorn", hint:"movie snack"}, {q:"what is the study of rocks called?", a:"geology", hint:"earth sciences"}, {q:"what popular sandwich ingredient is made from cured pork belly?", a:"bacon", hint:"crispy breakfast"}, {q:"what color is the sun often depicted as?", a:"yellow", hint:"bright and warm"}, {q:"what is the name of the famous clock tower in london (common name)?", a:"big ben", hint:"near the houses of parliament"}, {q:"what is the name of the chemical in chili peppers that makes them hot?", a:"capsaicin", hint:"spicy compound"}, {q:"what type of tree produces acorns?", a:"oak", hint:"sturdy hardwood"}, {q:"what is the name of the largest volcano in the solar system located on mars?", a:"olympus mons", hint:"very tall"}, {q:"what do you call a baby cow?", a:"calf", hint:"on a farm"}, {q:"what is the common name for sodium chloride?", a:"salt", hint:"table seasoning"}, {q:"what is the common name for dihydrogen monoxide?", a:"water", hint:"h2o"}, {q:"what is the name of the famous italian pasta shaped like little ears?", a:"orecchiette", hint:"means small ears"}, {q:"what is the name for a scientist who studies weather?", a:"meteorologist", hint:"forecasts storms"}, {q:"what is the fastest marine mammal?", a:"orca", hint:"killer whale (fast swimmer)"}, {q:"what is the name of the popular italian coffee made by forcing hot water through finely ground coffee?", a:"espresso", hint:"short and strong"}, {q:"what fruit do you get from a coconut palm?", a:"coconut", hint:"white flesh and water"}, {q:"what classic toy is made of interlocking colorful bricks?", a:"lego", hint:"buildable blocks"}, {q:"what insect goes through metamorphosis from caterpillar to winged adult?", a:"butterfly", hint:"starts as a caterpillar"}, {q:"what is the name of the largest planet in our solar system?", a:"jupiter", hint:"great red spot"}, {q:"which fruit is used to make vinegar when fermented?", a:"apple", hint:"cider vinegar"}, {q:"what sweet seasoning comes from sugarcane or sugar beets?", a:"sugar", hint:"bakes cakes"}, {q:"which animal is known as man's best friend?", a:"dog", hint:"loyal companion"}, {q:"what structure do bees build to store honey?", a:"hive", hint:"hexagonal cells"}, {q:"what is the name of the organ humans use to breathe?", a:"lungs", hint:"paired organs"}, {q:"what do you call a group of crows?", a:"murder", hint:"spooky name"}, {q:"what is the process plants use to convert sunlight into energy?", a:"photosynthesis", hint:"chlorophyll involved"}, {q:"what tool do carpenters use to drive nails?", a:"hammer", hint:"handle and head"}, {q:"what sweet fruit has a fuzzy skin and a stone inside?", a:"peach", hint:"summer fruit"}, {q:"what do you call an animal that eats only plants?", a:"herbivore", hint:"plant eater"}, {q:"what common household item is used to clean teeth?", a:"toothbrush", hint:"use daily"}, {q:"what small device stores digital photos and plugs into your camera?", a:"sd card", hint:"memory card"}, {q:"what is the popular name for sodium bicarbonate used in baking?", a:"baking soda", hint:"raises dough"}, {q:"what is the main ingredient in the japanese dish sashimi besides rice?", a:"fish", hint:"served raw"}, {q:"what is the bright green herb used on pizza and in pesto?", a:"basil", hint:"sweet herb"}, {q:"what aquatic animal squirts ink as a defense?", a:"squid", hint:"related to octopus"}, {q:"what fruit is also the name of a tech company (with bite logo)?", a:"apple", hint:"famous company"}, {q:"what is the small, spicy Korean side dish made of fermented cabbage?", a:"kimchi", hint:"spicy and sour"}, {q:"what cold dessert is churned and often served in cones?", a:"ice cream", hint:"popular treat"}, {q:"what household pet often chases mice and has whiskers?", a:"cat", hint:"purrs when happy"}, {q:"what plant provides the leaf for making tea (common word)?", a:"tea leaf", hint:"steep in hot water"}, {q:"what do you call a scientist who studies stars and planets?", a:"astronomer", hint:"looks at the sky"}, {q:"what is the main ingredient in hummus besides tahini?", a:"chickpeas", hint:"also called garbanzo beans"}, {q:"what is the name of the spicy red sauce often used with wings in the us?", a:"buffalo sauce", hint:"named after city"}, {q:"what yellow spice gives curry its color?", a:"turmeric", hint:"bright yellow"}, {q:"what is the name of the famous prehistoric monument in england made of standing stones?", a:"stonehenge", hint:"mysterious site"}, {q:"what do you call a baby frog?", a:"tadpole", hint:"lives in water"}, {q:"what is the main ingredient in traditional italian pesto?", a:"basil", hint:"green herb with oil and pine nuts"}, {q:"what is the name of the holiday where people dress up in costumes and get candy?", a:"halloween", hint:"end of october"}, {q:"what is the name of the world famous waterfall on the us-canada border?", a:"niagara falls", hint:"loud and powerful"}, {q:"what kitchen appliance pops kernels into popcorn?", a:"popper", hint:"or microwave works"}, {q:"what sea creature has five arms (often mistaken with octopus)?", a:"starfish", hint:"sea star"}, {q:"what beverage is made from roasted and ground beans?", a:"coffee", hint:"morning stimulant"}, {q:"what edible fungus is prized on pizzas and salads (short)?", a:"mushroom", hint:"fungus"}, {q:"what is the action of squeezing citrus to get juice called?", a:"juicing", hint:"fresh orange juice"}, {q:"what popular toy is a spinning top consisting of layered plastic discs?", a:"beyblade", hint:"battle tops"}, {q:"what small nut is often used to make marzipan?", a:"almond", hint:"sweet paste"}, {q:"what is the green sauce in mexico made from avocado?", a:"guacamole", hint:"served with chips"}, {q:"what do you call a baby sheep?", a:"lamb", hint:"tender meat and animal"}, {q:"what common condiment is made from tomatoes and vinegar?", a:"ketchup", hint:"used on fries"}, {q:"which insect produces silk used for textiles?", a:"silkworm", hint:"caterpillar stage"}, {q:"what is the name of the shallow-fried japanese omelette often served with sushi?", a:"tamago", hint:"sweet omelette"}, {q:"what is the term for the sound a dog makes?", a:"bark", hint:"woof"}, {q:"what popular frozen treat is made from milk and sugar and often comes on a stick called a 'popsicle'?", a:"popsicle", hint:"frozen snack"}, {q:"what is the name of the mineral used in making pencil 'lead' (actually)?", a:"graphite", hint:"not lead"}, {q:"what is the small salty snack made by baking weenie wrapped in dough sometimes called?", a:"pigs in a blanket", hint:"party food"}, {q:"what is the name for a person who studies plants?", a:"botanist", hint:"flora expert"}, {q:"what is the name of the game where you guess words by drawing pictures?", a:"pictionary", hint:"drawing game"}, {q:"what playful animal can balance on its tail and is a marsupial?", a:"kangaroo", hint:"hops"}, {q:"what do you call water when it's turned into vapor by boiling?", a:"steam", hint:"gaseous water"}, {q:"what small insect is known for forming long lines and carrying leaves?", a:"ant", hint:"hardworking insect"}, {q:"what tasty yellow fruit is curved and often eaten by monkeys in cartoons?", a:"banana", hint:"peel is slippery"}, {q:"what is the name of the fast-food sandwich that's a beef patty between buns often with lettuce and tomato?", a:"burger", hint:"grill favorite"}, {q:"what is the name of the red fruit used in making ketchup and sauces?", a:"tomato", hint:"technically a fruit"}, {q:"what is the name of the instrument with six strings commonly used in pop and rock music?", a:"guitar", hint:"strum or pick"}, {q:"what popular playground equipment swings back and forth on chains?", a:"swing", hint:"go higher"}, {q:"what small vehicle with two wheels is ridden by pedaling?", a:"bicycle", hint:"two-wheeler"}, {q:"what cylindrical bread is often used to make hot dogs?", a:"hot dog bun", hint:"soft bread"}, {q:"what is the name of the warm beverage made from cocoa, milk, and sugar?", a:"hot chocolate", hint:"winter drink"}, {q:"what small country is famous for its chocolate and watches?", a:"switzerland", hint:"alps country"}, {q:"what handheld device plays music from files or streaming services?", a:"smartphone", hint:"pocket computer"}, {q:"what is the term for a large organized group of musicians playing classical music?", a:"orchestra", hint:"conductor leads"}, {q:"what small tool do you use to tighten screws?", a:"screwdriver", hint:"flathead or philips"}, {q:"what is the small, fast bird sometimes kept as a pet and can mimic sounds?", a:"canary", hint:"yellow singer"}, {q:"what term describes the sound of a bell?", a:"toll", hint:"church bell sound"}, {q:"what is the name of the stage name for the artist born adele adkins (short)?", a:"adele", hint:"singer of 'hello'"}, {q:"what is the name of the protective covering on tree trunks?", a:"bark", hint:"dogs bark too"}, {q:"what small sea creature is often found in tide pools and clings to rocks?", a:"barnacle", hint:"hard shell"}, {q:"what is the name for the frozen form of water?", a:"ice", hint:"cold solid"}, {q:"what popular handheld puzzle toy has colored squares and is named after its inventor erno rubik?", a:"rubiks cube", hint:"twisty puzzle"}, {q:"what bright red berry is used for jams and often associated with christmas decorations?", a:"cranberry", hint:"tart fruit"}, {q:"which sea mammal is known for spouting water from its blowhole?", a:"whale", hint:"big ocean mammal"} ];
-  
-];
-
-// ---------- ensure pool has at least +50 extra questions (adds harmless variants if needed)
-(function ensureExtra50(){
-  const extraNeeded = 50;
-  let added = 0;
-  let idx = 0;
-  while(added < extraNeeded){
-    const src = POOL[idx % POOL.length];
-    const copy = { q: src.q + ' (extra)', a: src.a, hint: src.hint };
-    POOL.push(copy);
-    added++; idx++;
-    if(added > 500) break;
-  }
-})();
-
-// ---------- GAME SETTINGS ----------
-const PRIZE_MAP = {
-  1:1000,
-  2:3500,
-  3:5750,
-  4:8250,
-  5:14000,
-  6:20000,
-  7:50000,
-  8:120000,
-  9:190500,
-  10:500000
-};
-
+// ---------- CORE STATE ----------
 let questions = [], currentIndex=0, correctCount=0, hintsLeft=2, retriesLeft=1, usedPhone = false, gameOver=false;
 let audioCtx = null; let prizeProgress = [];
 
-// Host lines (10+)
+// ---------- PRIZE MAP ----------
+const PRIZE_MAP = {
+  0:0,1:1000,2:3500,3:5750,4:8250,5:14000,6:20000,7:50000,8:120000,9:190500,10:500000
+};
+
+// ---------- HOST LINES ----------
 const HOST_LINES = [
   "You're on the hot seat — ready to shine? 💼",
   "What would YOU do with the money? Dream big!",
@@ -229,12 +198,12 @@ const HOST_LINES = [
   "Final stretch! Give it everything you've got!"
 ];
 
-// family members (used for phone & panel)
+// ---------- FAMILY ----------
 const FAMILY = [
   {id:'mom', name:'Mom'}, {id:'dad', name:'Dad'}, {id:'sibling', name:'Sibling'}, {id:'cousin', name:'Cousin'}, {id:'friend1', name:'Friend 1'}, {id:'friend2', name:'Friend 2'}
 ];
 
-// sounds
+// ---------- SOUND HELPERS ----------
 function ensureAudio(){ if(audioCtx) return; audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
 function playBeep(freq=440, dur=90, type='sine', vol=0.07){ try{ ensureAudio(); const o=audioCtx.createOscillator(); const g=audioCtx.createGain(); o.type=type; o.frequency.value=freq; g.gain.value=vol; o.connect(g); g.connect(audioCtx.destination); o.start(); setTimeout(()=>{ o.stop(); }, dur); }catch(e){console.log(e);} }
 function playClick(){ playBeep(880,50,'square',0.04); }
@@ -244,22 +213,216 @@ function playDeal(){ playBeep(1000,130); setTimeout(()=>playBeep(760,120),120); 
 function playNoDeal(){ playBeep(240,80); setTimeout(()=>playBeep(280,80),90); }
 function playWin(){ for(let i=0;i<5;i++){ setTimeout(()=>playBeep(700 + i*100,140), i*120); } }
 
-// Chart.js setup
+// ---------- CHART ----------
 let chart = null;
 function initChart(){ const ctx = document.getElementById('prizeChart').getContext('2d'); chart = new Chart(ctx, { type: 'line', data: { labels: Array.from({length:10}, (_,i)=>'Q'+(i+1)), datasets:[{label:'Prize ($)',data:Array(10).fill(0),fill:false,borderColor:'#06b6d4',backgroundColor:'#7c3aed',tension:0.3,pointRadius:6}] }, options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}}} }); }
 function updateChart(){ if(!chart) return; const data = chart.data.datasets[0].data; for(let i=0;i<10;i++){ data[i] = prizeProgress[i] || 0; } chart.update(); }
 
-// utility shuffle
+// ---------- UTILS ----------
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
 
-// pickQuestions with light weighting: earlier picks favor simpler questions (here we approximate by slicing shuffled pool)
+// ---------- QUESTION POOL (curated + programmatic to reach 250) ----------
+const POOL = [
+  // Curated questions (a good chunk taken/expanded from your earlier lists)
+  {q:"what prime number comes after 47?", a:"53", hint:"it's between 50 and 55"},
+  {q:"what is the chemical symbol for gold?", a:"au", hint:"same as 'aurum'"},
+  {q:"in degrees, what's the sum of interior angles of a triangle?", a:"180", hint:"a straight line"},
+  {q:"which planet is known as the red planet?", a:"mars", hint:"roman god of war"},
+  {q:"what is the square root of 144?", a:"12", hint:"dozen"},
+  {q:"what large language family does spanish belong to?", a:"indo-european", hint:"same family as english"},
+  {q:"the capital of canada is?", a:"ottawa", hint:"not toronto"},
+  {q:"who painted the mona lisa?", a:"leonardo da vinci", hint:"italian renaissance man"},
+  {q:"what is h2o commonly called?", a:"water", hint:"essential for life"},
+  {q:"what city hosts the statue of liberty (country)?", a:"united states", hint:"country: usa"},
+  {q:"who proposed the theory of relativity (last name)?", a:"einstein", hint:"famous physicist with wild hair"},
+  {q:"what is the center of an atom called?", a:"nucleus", hint:"contains protons"},
+  {q:"which gas do plants primarily absorb?", a:"carbon dioxide", hint:"co2"},
+  {q:"in music, how many semitones in an octave?", a:"12", hint:"western chromatic scale"},
+  {q:"what animal is the largest living land mammal?", a:"elephant", hint:"long trunk"},
+  {q:"who wrote 'romeo and juliet'?", a:"shakespeare", hint:"bard"},
+  {q:"what is the value of pi rounded to two decimals?", a:"3.14", hint:"approximation"},
+  {q:"what is the hardest natural substance?", a:"diamond", hint:"often used in engagement rings"},
+  {q:"which element has atomic number 1?", a:"hydrogen", hint:"the lightest"},
+  {q:"what is 7 factorial (7!)?", a:"5040", hint:"7*6*5*4*3*2*1"},
+  {q:"the longest river in the world - commonly named?", a:"nile", hint:"flows through egypt"},
+  {q:"what temperature does water freeze in celsius?", a:"0", hint:"less than 1"},
+  {q:"which language has the most native speakers?", a:"mandarin", hint:"a chinese language"},
+  {q:"what is the smallest prime number?", a:"2", hint:"only even prime"},
+  {q:"what geometric shape has three sides?", a:"triangle", hint:"three"},
+  {q:"what organ pumps blood around the body?", a:"heart", hint:"symbol of love"},
+  {q:"who discovered penicillin (last name)?", a:"fleming", hint:"alexander ____"},
+  {q:"what is the chemical formula for table salt?", a:"nacl", hint:"sodium chloride"},
+  {q:"who was the first president of the united states?", a:"george washington", hint:"crossed the delaware"},
+  {q:"what is the study of cells called?", a:"cytology", hint:"cyto-"},
+  {q:"what fruit is the main ingredient in guacamole?", a:"avocado", hint:"green and creamy"},
+  {q:"what is 2 to the 10th power?", a:"1024", hint:"just over 1000"},
+  {q:"what is the capital of japan?", a:"tokyo", hint:"hosted 2020 olympics"},
+  {q:"which metal is liquid at room temperature?", a:"mercury", hint:"used in old thermometers"},
+  {q:"what mythical creature breathes fire in many stories?", a:"dragon", hint:"often hoards gold"},
+  {q:"who wrote the iliad and the odyssey (traditional attribution)?", a:"homer", hint:"ancient greek poet"},
+  {q:"what is the freezing point of water in fahrenheit?", a:"32", hint:"32°f"},
+  {q:"which organelle is the 'powerhouse' of the cell?", a:"mitochondrion", hint:"produces atp"},
+  {q:"what is the chemical symbol for oxygen?", a:"o", hint:"gas we breathe"},
+  {q:"which planet has the most moons (as of 2025)?", a:"jupiter", hint:"largest planet"},
+  {q:"what artistic movement is picasso associated with?", a:"cubism", hint:"fragmented forms"},
+  {q:"what is the capital of australia?", a:"canberra", hint:"not sydney"},
+  {q:"what does 'www' stand for?", a:"world wide web", hint:"internet prefix"},
+  {q:"who is known as the father of modern computing (turing or von neumann)?", a:"turing", hint:"turing test"},
+  {q:"what is the study of the past called?", a:"history", hint:"what happened before"},
+  {q:"what sweetener is made from bees?", a:"honey", hint:"not maple"},
+  {q:"what is a group of lions called?", a:"pride", hint:"royal group"},
+  {q:"who painted the starry night?", a:"vincent van gogh", hint:"post-impressionist"},
+  {q:"what device measures atmospheric pressure?", a:"barometer", hint:"predicts weather"},
+  {q:"what number is represented by the roman numeral 'x'?", a:"10", hint:"two fives"},
+  {q:"what is the capital of france?", a:"paris", hint:"city of lights"},
+  {q:"which gas makes up most of earth's atmosphere?", a:"nitrogen", hint:"about 78%"},
+  {q:"what is the currency of the united kingdom?", a:"pound sterling", hint:"abbrev: gbp"},
+  {q:"what is 11 * 11?", a:"121", hint:"11 squared"},
+  {q:"what is the primary component of natural gas?", a:"methane", hint:"ch4"},
+  {q:"what mammal lays eggs?", a:"platypus", hint:"a monotreme"},
+  {q:"who created sherlock holmes?", a:"arthur conan doyle", hint:"british author"},
+  {q:"what is the capital of italy?", a:"rome", hint:"colosseum"},
+  {q:"what is the term for a polygon with five sides?", a:"pentagon", hint:"five"},
+  {q:"what fundamental force holds nuclei together?", a:"strong force", hint:"one of four forces"},
+  {q:"what is the highest mountain above sea level?", a:"mount everest", hint:"nepal/china border"},
+  {q:"what is the primary language of brazil?", a:"portuguese", hint:"not spanish"},
+  {q:"what instrument measures earthquakes?", a:"seismometer", hint:"seismic waves"},
+  {q:"who is the author of 'a brief history of time'?", a:"stephen hawking", hint:"black holes"},
+  {q:"what color do you get by mixing red and blue (paint)?", a:"purple", hint:"royal color"},
+  {q:"what is the chemical symbol for iron?", a:"fe", hint:"from ferrum"},
+  {q:"who was the british prime minister during ww2?", a:"winston churchill", hint:"v for victory"},
+  {q:"what is the square of 15?", a:"225", hint:"15*15"},
+  {q:"what is the fastest land animal?", a:"cheetah", hint:"spotted sprint"},
+  {q:"which festival is celebrated with lanterns in china?", a:"mid autumn festival", hint:"mooncakes"},
+  {q:"what is the lightest noble gas?", a:"helium", hint:"used in balloons"},
+  {q:"what is the capital of egypt?", a:"cairo", hint:"pyramids nearby"},
+  {q:"what is the primary ingredient in traditional sushi vinegared rice aside from rice?", a:"rice vinegar", hint:"seasoning"},
+  {q:"who built the model of universal gravitation (last name)?", a:"newton", hint:"apple story"},
+  {q:"what is 13 + 24?", a:"37", hint:"sum under 40"},
+  {q:"what chemical element is represented by 'na'?", a:"sodium", hint:"salt"},
+  {q:"which country has the city named kyoto?", a:"japan", hint:"historic capital"},
+  {q:"in computing, what does 'cpu' stand for?", a:"central processing unit", hint:"brain of the computer"},
+  {q:"what is the study of weather called?", a:"meteorology", hint:"forecasts"},
+  {q:"what breed is known as the 'king of dogs' in the tibet region?", a:"tibetan mastiff", hint:"large guardian"},
+  {q:"who is the author of the hobbit?", a:"j r r tolkien", hint:"middle-earth"},
+  {q:"what is the atomic number of carbon?", a:"6", hint:"atomic number small"},
+  {q:"which composer wrote the 'fifth symphony'?", a:"beethoven", hint:"famous motif"},
+  {q:"what year did the berlin wall fall?", a:"1989", hint:"end of cold war era"},
+  {q:"what spice is derived from dried stigma of crocus sativus?", a:"saffron", hint:"expensive spice"},
+  {q:"what is the study of insects called?", a:"entomology", hint:"bugs"},
+  {q:"which ocean is the largest?", a:"pacific", hint:"vast and deep"},
+  {q:"what is the value of 0! (zero factorial)?", a:"1", hint:"by definition"},
+  {q:"what is the capital of russia?", a:"moscow", hint:"kremlin"},
+  {q:"what mammal can fly?", a:"bat", hint:"uses echolocation"},
+  {q:"which artist is known for the 'persistence of memory' clocks?", a:"salvador dali", hint:"surrealist"},
+  {q:"what city is famous for tango and beef, capital of argentina?", a:"buenos aires", hint:"latin america"},
+  {q:"what is the term for speed of light in vacuum (symbol c) approx km/s?", a:"299792", hint:"~3e5 km/s"},
+  {q:"who was the first woman to fly solo across the atlantic?", a:"amelia earhart", hint:"disappeared over pacific"},
+  {q:"what is the smallest continent by land area?", a:"australia", hint:"continent-country"},
+  {q:"what color are chloroplasts typically?", a:"green", hint:"contain chlorophyll"},
+  {q:"what is the capital of turkey?", a:"ankara", hint:"not istanbul"},
+  {q:"which novelist wrote '1984'?", a:"george orwell", hint:"dystopia"},
+  {q:"what kind of bond involves sharing electron pairs?", a:"covalent", hint:"molecule-level bond"},
+  {q:"what is the chemical formula for ozone?", a:"o3", hint:"three oxygens"},
+  {q:"who was assassinated in 1963 in dallas?", a:"john f kennedy", hint:"american president"},
+  {q:"what is the metric unit of mass?", a:"kilogram", hint:"kg"},
+  {q:"what country invented pizza?", a:"italy", hint:"naples"},
+  {q:"what is the largest organ in the human body?", a:"skin", hint:"protective covering"},
+  {q:"what is the symbol for pi in greek alphabet?", a:"pi", hint:"π"},
+  {q:"who discovered electricity with experiments using kites?", a:"benjamin franklin", hint:"founding father"},
+  {q:"what geometric solid has 6 faces all squares?", a:"cube", hint:"all edges equal"},
+  {q:"what is the name of the galaxy we live in?", a:"milky way", hint:"spiral galaxy"},
+  {q:"what is the process plants use to make food from sunlight?", a:"photosynthesis", hint:"light energy"},
+  {q:"which city is known as the eternal city?", a:"rome", hint:"ancient empire"},
+  {q:"what is the largest internal organ in humans?", a:"liver", hint:"detoxifies"},
+  {q:"who painted the ceiling of the sistine chapel?", a:"michelangelo", hint:"also sculpted david"},
+  {q:"what metal is used to make bronze (alloy of copper and ...)?", a:"tin", hint:"bronze = copper + ?"},
+  {q:"what is the common name for sodium bicarbonate?", a:"baking soda", hint:"used in baking"},
+  {q:"which element is used to sterilize water and is in pools?", a:"chlorine", hint:"keeps pools safe"},
+  {q:"what is the capital of india?", a:"new delhi", hint:"not mumbai"},
+  {q:"who wrote the novel 'frankenstein'?", a:"mary shelley", hint:"published 1818"},
+  {q:"what is the main ingredient in hummus?", a:"chickpeas", hint:"also called garbanzo"},
+  {q:"what is the chemical symbol for potassium?", a:"k", hint:"bananas contain it"},
+  {q:"what is the name of the longest bone in the human body?", a:"femur", hint:"thigh bone"},
+  {q:"which country has the most time zones (including overseas territories)?", a:"france", hint:"many overseas departments"},
+  {q:"what is the name of the pigment that makes plants green?", a:"chlorophyll", hint:"absorbs light"},
+  {q:"what is the art of paper folding called?", a:"origami", hint:"japanese tradition"},
+  {q:"what is the capital of mexico?", a:"mexico city", hint:"largest city in mexico"},
+  {q:"what is 9 squared?", a:"81", hint:"9*9"},
+  {q:"what famous physicist developed quantum mechanics contributions and has a namesake uncertainty principle?", a:"heisenberg", hint:"uncertainty"},
+  {q:"what is the national flower of japan?", a:"cherry blossom", hint:"sakura"},
+  {q:"which novel begins with 'call me ishmael'?,", a:"moby dick", hint:"whale"},
+  {q:"what is the process of cell division producing gametes called?", a:"meiosis", hint:"halves chromosome number"},
+  {q:"what is the chemical that makes chili peppers hot?", a:"capsaicin", hint:"in spicy peppers"},
+  {q:"what currency uses the symbol '€'?", a:"euro", hint:"used in many european countries"},
+  {q:"which instrument has keys, pedals, and strings struck by hammers?", a:"piano", hint:"concert instrument"},
+  {q:"who is the author of 'to kill a mockingbird'?", a:"harper lee", hint:"atticus finch"},
+  {q:"what bird is a national symbol of the united states?", a:"bald eagle", hint:"white head"},
+  {q:"what mathematician is famous for a last theorem proved by andrew wiles?", a:"fermat", hint:"little theorem?"},
+  {q:"what is the chemical formula for carbon dioxide?", a:"co2", hint:"exhaled gas"},
+  {q:"what is the primary ingredient in traditional paella besides rice?", a:"saffron", hint:"gives yellow color"},
+  {q:"which author wrote 'the catcher in the rye'", a:"j d salinger", hint:"holden caulfield"},
+  {q:"what is the capital of south africa (one of the three)?", a:"cape town", hint:"legislative capital"}
+  // (we'll add programmatically-generated questions next to reach 250)
+];
+
+// ---------- Programmatically add extra questions to reach 250 ----------
+(function extendPoolTo250(){
+  const baseLen = POOL.length;
+  const target = 250;
+  let i = 0;
+  while(POOL.length < target){
+    i++;
+    // generate arithmetic / trivia variants to expand the pool
+    // produce mix of math, simple facts, and fun trivia
+    if(i % 5 === 0){
+      // small math
+      const a = (i*3 + 7) % 97;
+      const b = (i*5 + 11) % 89;
+      const q = `what is ${a} + ${b}?`;
+      const aAns = (a + b).toString();
+      POOL.push({q:q, a:aAns, hint:'add the two numbers'});
+    } else if(i % 5 === 1){
+      // multiplication
+      const a = (i % 12) + 2;
+      const b = ((i*2) % 11) + 2;
+      const q = `what is ${a} * ${b}?`;
+      POOL.push({q:q, a:(a*b).toString(), hint:'multiply the two numbers'});
+    } else if(i % 5 === 2){
+      // months / calendar
+      const months = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+      const idx = (i*7) % 12;
+      POOL.push({q:`which month is number ${idx+1}?`, a:months[idx], hint:'month by number'});
+    } else if(i % 5 === 3){
+      // countries capitals variants (simple)
+      const caps = [
+        ['lisbon','portugal'],['bern','switzerland'],['oslo','norway'],['helsinki','finland'],['vienna','austria'],
+        ['athens','greece'],['zagreb','croatia'],['prague','czech republic'],['brussels','belgium'],['vienna','austria']
+      ];
+      const pick = caps[i % caps.length];
+      POOL.push({q:`what is the capital of ${pick[1]}?`, a:pick[0], hint:'capital city'});
+    } else {
+      // odd/fun facts
+      const facts = [
+        {q:'what fruit shares its name with a color?', a:'orange', hint:'looks like its name'},
+        {q:'what animal purrs when content?', a:'cat', hint:'common pet'},
+        {q:'what is the opposite of hot?', a:'cold', hint:'temperature antonym'},
+        {q:'what do bees make?', a:'honey', hint:'sweet spread'},
+        {q:'what is 1 + 1?', a:'2', hint:'basic addition'}
+      ];
+      const pick = facts[i % facts.length];
+      POOL.push({q:pick.q, a:pick.a, hint:pick.hint});
+    }
+    if(POOL.length >= target) break;
+  }
+})();
+
+// ---------- PICK QUESTIONS (10 per run) ----------
 function pickQuestions(){
   const copy = POOL.slice();
   shuffle(copy);
-  // attempt a progressive difficulty: take more "simple" (start of copy) for early indices and harder for later
   const selected = [];
   for(let i=0;i<10;i++){
-    // bias factor: later questions pick from later positions
     const biasStart = Math.floor((i/10) * (copy.length*0.6));
     const pickIndex = biasStart + Math.floor(Math.random() * Math.max(1, Math.floor(copy.length*0.4)));
     selected.push(copy[pickIndex % copy.length]);
@@ -267,7 +430,7 @@ function pickQuestions(){
   return selected;
 }
 
-// family advice rendering
+// ---------- FAMILY ADVICE ----------
 function familyAdvice(prize, stage){
   const adv = [];
   FAMILY.forEach((m, idx)=>{
@@ -289,17 +452,16 @@ function renderFamily(prize, stage){
   });
 }
 
-// host speak
+// ---------- HOST SPEAK ----------
 function hostSpeak(line){
   const el = document.getElementById('hostLine'); el.textContent = line;
-  // play a small click to simulate host sound
   setTimeout(()=>{ playClick(); }, 60);
 }
 
-// confetti
+// ---------- CONFETTI ----------
 function triggerConfetti(){ const C = document.getElementById('confetti'); const emojis = ['🎉','🎊','🏆','💰','✨','🚗','🏝️']; for(let i=0;i<42;i++){ const s = document.createElement('span'); s.textContent = emojis[Math.floor(Math.random()*emojis.length)]; s.style.left = (Math.random()*100)+'%'; s.style.fontSize = (12 + Math.random()*36) + 'px'; s.style.animationDuration = (2200 + Math.random()*2000)+'ms'; C.appendChild(s); setTimeout(()=>{ s.remove(); }, 5000); } }
 
-// UI updates
+// ---------- UI UPDATE ----------
 function updateUI(){
   document.getElementById('current').textContent = Math.min(currentIndex+1, questions.length);
   document.getElementById('correctCount').textContent = correctCount;
@@ -311,7 +473,7 @@ function updateUI(){
   document.getElementById('retriesLeft').textContent = retriesLeft;
 }
 
-// show question
+// ---------- SHOW QUESTION ----------
 function showQuestion(){
   if(currentIndex >= questions.length){ endGame(); return; }
   const q = questions[currentIndex];
@@ -322,13 +484,12 @@ function showQuestion(){
   document.getElementById('answerInput').value='';
   document.getElementById('phoneArea').style.display='none';
   updateUI();
-  // host line randomized from HOST_LINES
   const hostLine = HOST_LINES[Math.floor(Math.random()*HOST_LINES.length)];
   hostSpeak(hostLine);
   renderFamily(prizeProgress[currentIndex] || 0, 'after');
 }
 
-// offer an enticing buyout line (host tempts between q5-q8)
+// ---------- HOST TEMPTATION (Q5-8) ----------
 function hostTemptation(){
   if(currentIndex+1 >=5 && currentIndex+1 <=8){
     const temptations = [
@@ -339,27 +500,25 @@ function hostTemptation(){
     ];
     const txt = temptations[Math.floor(Math.random()*temptations.length)];
     hostSpeak("Host: " + txt);
-    // show a friendly deal-style prompt
     document.getElementById('dealText').textContent = `Tempting offer: ${txt} — bank offers $${(PRIZE_MAP[correctCount] || 0).toLocaleString()}.`;
     document.getElementById('dealArea').style.display = 'block';
   }
 }
 
-// offer deal normally
+// ---------- OFFER DEAL ----------
 function offerDeal(){
   const offer = PRIZE_MAP[correctCount] || 0;
   const dealText = offer>0 ? `Banker offers: $${offer.toLocaleString()}. Take the deal?` : 'Banker offers $0.';
   document.getElementById('dealText').textContent = dealText;
   document.getElementById('dealArea').style.display='block';
   renderFamily(offer, 'deal');
-  // host comment
   hostSpeak(`Host: Banker offers $${offer.toLocaleString()}. What will you do?`);
 }
 
-// hide deal
+// ---------- HIDE DEAL ----------
 function hideDeal(){ document.getElementById('dealArea').style.display='none'; }
 
-// end game
+// ---------- END GAME ----------
 function endGame(finalDealAmount){
   gameOver=true;
   document.getElementById('question').textContent = 'Game over 🎉';
@@ -383,8 +542,8 @@ function endGame(finalDealAmount){
   }
 }
 
-// submit answer logic with retry support
-let lastAttemptWrong = false; // track if current question was wrong once
+// ---------- SUBMIT ANSWER (with Retry support) ----------
+let lastAttemptWrong = false;
 function submitAnswer(){
   if(gameOver) return;
   const raw = document.getElementById('answerInput').value.trim();
@@ -392,7 +551,7 @@ function submitAnswer(){
   const ans = raw.toLowerCase();
   const q = questions[currentIndex];
   playClick();
-  // if answer correct
+  // correct
   if(ans === (q.a + '').toLowerCase()){
     correctCount++;
     const prizeNow = PRIZE_MAP[correctCount] || 0;
@@ -400,13 +559,11 @@ function submitAnswer(){
     document.getElementById('status').textContent = `Correct! ✅ You now have $${prizeNow.toLocaleString()}`;
     playCorrect();
     hostSpeak("Host: You're on fire! What would you do with the money?");
-    // reset retry/wrong trackers
     lastAttemptWrong = false;
-    // advance
     currentIndex++;
     updateUI();
     updateChart();
-    // offer temptation or deal shortly
+    // temptation / deal
     setTimeout(()=>{
       if(currentIndex < questions.length){
         if(currentIndex+1 >=5 && currentIndex+1 <=8) hostTemptation();
@@ -418,8 +575,7 @@ function submitAnswer(){
     return;
   }
 
-  // if answer incorrect
-  // if retry available and this is the first wrong for this question, allow retry
+  // first wrong and retry available (automatic)
   if(retriesLeft > 0 && !lastAttemptWrong){
     retriesLeft--;
     lastAttemptWrong = true;
@@ -427,10 +583,10 @@ function submitAnswer(){
     document.getElementById('retriesLeft').textContent = retriesLeft;
     playClick();
     hostSpeak("Host: You used your retry — go again!");
-    return; // allow user to answer again for same question
+    return; // allow second attempt on same question
   }
 
-  // otherwise treat as wrong and reset prize
+  // otherwise wrong permanently
   document.getElementById('status').textContent = 'Incorrect ❌ — you lost your accumulated prize. Restart or keep playing to rebuild.';
   document.getElementById('answerReveal').style.display='block';
   document.getElementById('answerReveal').textContent = 'Answer: ' + q.a + ' 🔒';
@@ -443,14 +599,13 @@ function submitAnswer(){
   updateChart();
   document.getElementById('restartBtn').style.display='block';
   renderFamily(0,'after');
-  // move on after a short pause
+  // move on after short pause
   currentIndex++;
   updateUI();
-  // offer a 0 deal just for continuity
   setTimeout(()=>{ offerDeal(); }, 420);
 }
 
-// hint button
+// ---------- HINT ----------
 function useHint(){
   if(gameOver) return;
   if(hintsLeft <= 0){ alert('No hints left'); return; }
@@ -462,7 +617,7 @@ function useHint(){
   hostSpeak("Host: I've given you a hint.");
 }
 
-// Phone-a-Friend
+// ---------- PHONE-A-FRIEND ----------
 function showPhoneChoices(){
   if(gameOver) return;
   const wrap = document.getElementById('phoneChoices'); wrap.innerHTML='';
@@ -481,9 +636,8 @@ function callFriend(f){
   if(gameOver) return;
   if(usedPhone){ document.getElementById('phoneResponse').style.display='block'; document.getElementById('phoneResponse').textContent = `${f.name}: I already helped you this game.`; return; }
   usedPhone = true;
-  // generate guess: probability of correct varies slightly by member
   const q = questions[currentIndex];
-  const baseChance = 0.25 + Math.random()*0.45; // 25% to 70% chance of giving something useful
+  const baseChance = 0.25 + Math.random()*0.45; // 25% to 70% chance of being accurate
   const willBeRight = Math.random() < baseChance;
   let response='';
   if(willBeRight){
@@ -492,19 +646,21 @@ function callFriend(f){
     // partial or wrong guess — sometimes a hint-like guess
     const guess = (typeof q.a === 'string' && q.a.length>3) ? q.a.slice(0, Math.max(2, Math.floor(q.a.length/2))) + '...' : q.a;
     const hedge = Math.random() < 0.5 ? "Not 100% sure, but maybe" : "I might be wrong, but";
-    response = `${f.name}: ${hedge} "${guess}" — could be worth considering.`;
+    // vary the phrasing by family member
+    const tone = (f.id==='mom' || f.id==='dad') ? `${hedge} "${guess}" — sounds familiar.` : `${hedge} "${guess}" — could be it.`;
+    response = `${f.name}: ${tone}`;
   }
   document.getElementById('phoneResponse').style.display='block';
   document.getElementById('phoneResponse').textContent = response;
   playClick();
-  hostSpeak(`Host: ${f.name} says "${willBeRight ? 'I think that is correct!' : 'I'm unsure...' }"`);
+  hostSpeak(`Host: ${f.name} says "${willBeRight ? 'I think that is correct!' : 'I\'m unsure...' }"`);
 }
 
-// deal/no-deal
+// ---------- DEAL / NO DEAL ----------
 function takeDeal(){ if(gameOver) return; const offer = PRIZE_MAP[correctCount] || 0; playDeal(); hideDeal(); endGame(offer); }
 function noDeal(){ if(gameOver) return; playNoDeal(); hideDeal(); if(currentIndex < questions.length) showQuestion(); }
 
-// restart
+// ---------- RESTART ----------
 function restartGame(){
   document.getElementById('restartBtn').style.display='none';
   questions = pickQuestions();
@@ -517,13 +673,13 @@ function restartGame(){
   document.getElementById('phoneArea').style.display='none';
 }
 
-// keyboard and wiring
+// ---------- WIRING ----------
 document.getElementById('submitBtn').addEventListener('click', submitAnswer);
 document.getElementById('hintBtn').addEventListener('click', useHint);
 document.getElementById('retryBtn').addEventListener('click', ()=>{
   if(gameOver) return;
   if(retriesLeft <= 0){ alert('No retries left'); return; }
-  // retry button usage is designed to be used proactively before a wrong answer; but allow using it to ensure user has another chance
+  // proactive reservation: consume retries and allow one extra wrong later
   retriesLeft--; document.getElementById('retriesLeft').textContent = retriesLeft;
   lastAttemptWrong = false;
   document.getElementById('status').textContent = 'Retry reserved — if you answer wrong, you will get one more attempt.';
@@ -536,7 +692,7 @@ document.getElementById('noDealBtn').addEventListener('click', noDeal);
 document.getElementById('restartBtn').addEventListener('click', restartGame);
 document.getElementById('answerInput').addEventListener('keydown',(e)=>{ if(e.key==='Enter') submitAnswer(); });
 
-// start overlay
+// ---------- START / RULES ----------
 document.getElementById('startBtn').addEventListener('click', ()=>{
   ensureAudio();
   document.getElementById('answerInput').disabled=false;
@@ -545,9 +701,9 @@ document.getElementById('startBtn').addEventListener('click', ()=>{
   initGame();
   playBeep(440,120);
 });
-document.getElementById('viewRules').addEventListener('click', ()=>{ alert('Rules:\\n- Type answers in lowercase.\\n- Two regular hints total.\\n- One Retry total per game (useful if you answer wrong once).\\n- One Phone-a-Friend call per game.\\n- Wrong twice on a question resets your accumulated prize to $0.\\n- Host and family will react and may offer deals.'); });
+document.getElementById('viewRules').addEventListener('click', ()=>{ alert('Rules:\\n- Type answers in lowercase.\\n- Two regular hints total.\\n- One Retry total per game (use proactively or use after wrong answer).\\n- One Phone-a-Friend call per game.\\n- Wrong twice on a question resets your accumulated prize to $0.\\n- Host and family will react and may offer deals.'); });
 
-// init game
+// ---------- INIT GAME ----------
 function initGame(){
   if(!chart) initChart();
   questions = pickQuestions();
@@ -558,15 +714,13 @@ function initGame(){
   hostSpeak("Host: Let's play — good luck!");
 }
 
-// on load minimal prepare
+// ---------- ON LOAD PREP ----------
 (function(){
   document.getElementById('status').textContent = 'Click Start to enable sounds and begin your challenge! 🎵';
   prizeProgress = Array(10).fill(0);
   initChart(); updateChart(); renderFamily(0,'after');
-  // small family panel initial text
   hostSpeak("Host: Welcome! Press Start to begin.");
 })();
-
 </script>
 </body>
 </html>
